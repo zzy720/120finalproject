@@ -15,12 +15,13 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
-    scene: [ Menu, Play, Credit, Tutorial,Gameover ]
+    scene: [ Menu, Funeral, Puzzle ]
 }
 
 let game = new Phaser.Game(config);
 
 //globalized text font
+/*
 let scoreConfig = {
     fontFamily: 'system-ui',
     fontSize: '21px',
@@ -29,3 +30,4 @@ let scoreConfig = {
     align: 'right',
     fixedWidth: 0
 };
+*/

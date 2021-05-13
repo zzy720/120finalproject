@@ -1,10 +1,9 @@
 /*
-Collaborator Names: Noah Jiang, Zeyu Zhang, Bianca Hsieh. Go to in-game credit scene to see
-the work distribution and contribution.
+Collaborator Names: Noah Jiang, Zeyu Zhang, Bianca Hsieh. 
 
 Game Title: 
 
-Date Completed: 5/11/2021
+Date Completed: 
 
 Creative Tilt Justification:
 */
@@ -15,13 +14,19 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
-    scene: [ Menu, Funeral, Puzzle ]
+    scene: [ Menu, Funeral, Puzzle ],
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 200 },
+            debug: true
+        }
+    }
 }
 
 let game = new Phaser.Game(config);
 
 //globalized text font
-/*
 let scoreConfig = {
     fontFamily: 'system-ui',
     fontSize: '21px',
@@ -30,4 +35,8 @@ let scoreConfig = {
     align: 'right',
     fixedWidth: 0
 };
-*/
+
+//reserve key inputs
+let keyA, keyD, keyE, keySPACE;
+//jumping status
+let isJump = false;

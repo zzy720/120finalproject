@@ -9,7 +9,6 @@ class Puzzle extends Phaser.Scene{
     }
 
     create() {
-         //this.add.text(400,230, "puzzle", scoreConfig);
         //player input definition
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
@@ -22,8 +21,11 @@ class Puzzle extends Phaser.Scene{
         let layer = this.map.createLayer('ground',[tiles]);  // set layer name
         //this.layer.resizeWorld();
 
+        this.physics.world.setBounds(0, 0, 1000, 1000);
+
         //main character
         this.main = new Tony(this, 60, 35, 'tony_walk', 0).setOrigin(0, 0);
+        this.main.setScale(0.5);
         this.physics.add.existing(this.main);
         this.main.body.setCollideWorldBounds(true);
         this.main.body.onWorldBounds = true;
@@ -33,7 +35,7 @@ class Puzzle extends Phaser.Scene{
         });
 
         //camera setting
-        this.cameras.main.setBounds(0, 0, 5000, game.config.height);
+        this.cameras.main.setBounds(0, 0, 1000, 1000);
         this.cameras.main.startFollow(this.main, false, 1, 1, 0, 155);
 
 
@@ -42,7 +44,9 @@ class Puzzle extends Phaser.Scene{
         //let layer = this.map.createLayer('ground',[tiles]);  // set layer name
         //this.layer.resizeWorld();
         
-        this.physics.add.collider(this.main,layer);
+        this.physics.add.collider(this.main, layer, ()=> {
+            isJump = false;
+        });
         layer.setCollisionByProperty({ collides: true });
 
         /*const debugGraphics = this.add.graphics().setAlpha(0.75);

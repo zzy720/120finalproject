@@ -13,11 +13,11 @@ class Menu extends Phaser.Scene{
         this.continue = this.add.text(320, 300, 'Press Space to start', scoreConfig).setOrigin(0.5, 0.5);
 
         //user interaction to continue to the game
-
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     update() {
+        //go to game scene when press space
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.scene.start('funeralScene');
         }

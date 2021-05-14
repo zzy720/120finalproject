@@ -8,19 +8,21 @@ class Tony extends Phaser.GameObjects.Sprite {
     }
 
     update() {
-        if(keyA.isDown) {
+        //movement 
+
+        if(keyA.isDown) { //move left
             this.body.setVelocityX(-100);
             isLeft = true;
-        } else if(keyD.isDown) {
+        } else if(keyD.isDown) { //move right
             this.body.setVelocityX(100);
             isRight = true;
-        } else {
+        } else { //idle
             this.body.setVelocityX(0);
             isLeft = false;
             isRight = false;
         }
 
-        if (Phaser.Input.Keyboard.JustDown(keySPACE) && !isJump) {
+        if (Phaser.Input.Keyboard.JustDown(keySPACE) && !isJump) { //jump
             this.body.setVelocityY(-150);
             isJump = true;
         }

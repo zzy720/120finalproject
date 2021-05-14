@@ -1,14 +1,3 @@
-/*
-Collaborator Names: Noah Jiang, Zeyu Zhang, Bianca Hsieh. 
-
-Game Title: 
-
-Date Completed: 
-
-Creative Tilt Justification:
-*/
-
-
 // game configuration
 let config = {
     type: Phaser.CANVAS,
@@ -36,15 +25,15 @@ let scoreConfig = {
     fixedWidth: 0
 };
 
-let dialogueConfig = {
-    fontFamily: 'system-ui',
-    fontSize: '21px',
-    color: '#6b97bb',
-    align: 'right',
-};
+
 //reserve key inputs
 let keyA, keyD, keyE, keyS, keySPACE;
+
 //jumping status
 let isJump = false;
+
+//moving status
 let isLeft, isRight = false;
+
+//talking status
 let isTalking = false;

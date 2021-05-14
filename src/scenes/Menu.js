@@ -19,6 +19,7 @@ class Menu extends Phaser.Scene{
     update() {
         //go to game scene when press space
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            //this.scene.start('puzzleScene');
             this.scene.start('funeralScene');
         }
 

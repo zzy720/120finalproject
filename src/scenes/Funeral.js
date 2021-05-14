@@ -44,7 +44,7 @@ class Funeral extends Phaser.Scene{
         this.physics.world.setBounds(0, 0, 5000, game.config.height);
         
         //tomb object 
-        this.tomb = this.physics.add.sprite(1000, 480, 'rip');
+        this.tomb = this.physics.add.sprite(300, 480, 'rip');
         this.tomb.body.setCollideWorldBounds(true);
 
         //slime NPC
@@ -64,7 +64,7 @@ class Funeral extends Phaser.Scene{
         });
 
         //interact text
-        this.interact = this.add.text(1000, 370, "press E to interact", scoreConfig);
+        this.interact = this.add.text(300, 370, "press E to interact", scoreConfig);
         this.interactSlime = this.add.text(200, 370, "press E to interact", scoreConfig);
         this.inter = false;
 

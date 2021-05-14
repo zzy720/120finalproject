@@ -37,3 +37,9 @@ let isLeft, isRight = false;
 
 //talking status
 let isTalking = false;
+
+
+let map;
+let layer;
+let tiles;
+let controls;

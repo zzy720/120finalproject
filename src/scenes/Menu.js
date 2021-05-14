@@ -4,10 +4,20 @@ class Menu extends Phaser.Scene{
     }
 
     preload() {
-
+        //load sfx and bgm
+        this.load.audio('button', './assets/button.wav');
+        this.load.audio('bgm', './assets/bgm.wav');
     }
 
     create() {
+        //create bgm and play
+        this.background = this.sound.add('bgm', {
+            volume: 0.3,
+            loop: true,
+        });
+
+        this.background.play(); //play bgm
+
         //add texts
         this.title = this.add.text(320, 240, 'GAME WITHOUT A NAME YET', scoreConfig).setOrigin(0.5, 0.5);
         this.continue = this.add.text(320, 300, 'Press Space to start', scoreConfig).setOrigin(0.5, 0.5);
@@ -19,7 +29,7 @@ class Menu extends Phaser.Scene{
     update() {
         //go to game scene when press space
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
-            //this.scene.start('puzzleScene');
+            this.sound.play('button'); //play sfx
             this.scene.start('funeralScene');
         }
 

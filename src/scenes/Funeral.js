@@ -19,6 +19,7 @@ class Funeral extends Phaser.Scene{
     }
 
     create() {
+        this.hastalked = false; //talked to slime or not
         this.dialogorder = 0; //dialogue counter
 
         /* this.anims.create({
@@ -44,7 +45,7 @@ class Funeral extends Phaser.Scene{
         this.physics.world.setBounds(0, 0, 5000, game.config.height);
         
         //tomb object 
-        this.tomb = this.physics.add.sprite(300, 480, 'rip');
+        this.tomb = this.physics.add.sprite(1000, 480, 'rip');
         this.tomb.body.setCollideWorldBounds(true);
 
         //slime NPC
@@ -64,7 +65,7 @@ class Funeral extends Phaser.Scene{
         });
 
         //interact text
-        this.interact = this.add.text(300, 370, "press E to interact", scoreConfig);
+        this.interact = this.add.text(1000, 370, "press E to interact", scoreConfig);
         this.interactSlime = this.add.text(200, 370, "press E to interact", scoreConfig);
         this.inter = false;
 
@@ -80,16 +81,22 @@ class Funeral extends Phaser.Scene{
 
         //set interaction
         this.physics.add.overlap(this.main, this.tomb, () => {
-            this.inter = true;
-            if(Phaser.Input.Keyboard.JustDown(keyE)) {
-                this.scene.start('puzzleScene');
-            }
+            this.inter = true; //show instruction
+            if(Phaser.Input.Keyboard.JustDown(keyE)){ //if player input
+                if(this.hastalked) { //if talked to slime
+                    this.sound.play('button');
+                    this.scene.start('puzzleScene');
+                } else {
+                    this.warn = this.add.text(960, 330, "why are you ignoring the slime?", scoreConfig);
+                }
+            } 
         });
 
         //set interaction
         this.physics.add.overlap(this.main, this.slime, () => {
             this.isSlime = true;
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
+                this.sound.play('button');
                 isTalking = true;
             }
         });
@@ -137,12 +144,13 @@ class Funeral extends Phaser.Scene{
 
     //dialogue with slime
     slimetalk() {
-        this.slimedialogue = ["Slime:  Hello! This is a demonstration", "Slime:  for the dialogue mechanism", "Slime:  Go right side and found the stone", "Slime:  and you will know what to do"];
+        this.slimedialogue = ["Slime:  Hello! This is a demonstration", "Slime:  of the dialogue mechanism", "Slime:  Go right side and found the stone", "Slime:  and you will know what to do"];
         this.back.setActive(true).setVisible(true);
         this.dialogue.setActive(true).setVisible(true);
         this.space.setActive(true).setVisible(true);
         this.dialogue.text = this.slimedialogue[this.dialogorder];
         if(Phaser.Input.Keyboard.JustDown(keyS)) {
+            this.sound.play('button');
             this.dialogorder += 1;
             this.dialogue.text = this.slimedialogue[this.dialogorder];
             if(this.dialogorder > this.slimedialogue.length) {
@@ -154,5 +162,6 @@ class Funeral extends Phaser.Scene{
                 isTalking = false;
             }
         }
+        this.hastalked = true;
     }
 }

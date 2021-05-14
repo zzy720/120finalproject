@@ -19,7 +19,7 @@ let config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 200 },
-            debug: true
+            debug: false
         }
     }
 }
@@ -36,7 +36,15 @@ let scoreConfig = {
     fixedWidth: 0
 };
 
+let dialogueConfig = {
+    fontFamily: 'system-ui',
+    fontSize: '21px',
+    color: '#6b97bb',
+    align: 'right',
+};
 //reserve key inputs
-let keyA, keyD, keyE, keySPACE;
+let keyA, keyD, keyE, keyS, keySPACE;
 //jumping status
 let isJump = false;
+let isLeft, isRight = false;
+let isTalking = false;

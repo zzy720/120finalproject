@@ -6,7 +6,8 @@ class Puzzle extends Phaser.Scene{
     preload() {
         //load images and spritesheets
         this.load.tilemapTiledJSON('map', 'assets/tilemaps/tilemap1.json')
-        this.load.image('tiles', 'assets/tilemaps/tilesets.png');  
+        this.load.image('tiles', 'assets/tilemaps/tilesets.png'); 
+        this.load.image('tiles2', 'assets/tilemaps/tilesets2.png'); 
         //this.load.image('button1', './assets/images/botton1.png');
         this.load.spritesheet('button1', './assets/images/botton1-Sheet.png', {
             frameWidth: 32,
@@ -45,6 +46,14 @@ class Puzzle extends Phaser.Scene{
             }),
             frameRate: 8
         });
+        
+        //create the map
+        this.map = this.add.tilemap('map'); 
+        let tiles = this.map.addTilesetImage('tilesets','tiles');  // set tileset name
+        let tiles2 = this.map.addTilesetImage('tilesets2','tiles2');
+        let bglayer = this.map.createLayer('background',[tiles2]);
+        let layer = this.map.createLayer('ground',[tiles]);  // set layer name
+                
 
         //interaction guide
         this.interact = this.add.text(220, 70, "try to step on it", scoreConfig);
@@ -75,10 +84,7 @@ class Puzzle extends Phaser.Scene{
         this.spike2 = this.spikegroup.create(420, 665, 'spikes');
         this.spike3 = this.spikegroup.create(540, 568, 'spikes');
 
-        //create the map
-        this.map = this.add.tilemap('map'); 
-        let tiles = this.map.addTilesetImage('tilesets','tiles');  // set tileset name
-        let layer = this.map.createLayer('ground',[tiles]);  // set layer name
+
         layer.setCollisionByProperty({ collides: true });
         this.physics.world.setBounds(0, 0, 1000, 1000);
 

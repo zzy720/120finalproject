@@ -16,7 +16,7 @@ class Menu extends Phaser.Scene{
             loop: true,
         });
 
-        this.background.play(); //play bgm
+        //this.background.play(); //play bgm
 
         //add texts
         this.title = this.add.text(320, 240, 'GAME WITHOUT A NAME YET', scoreConfig).setOrigin(0.5, 0.5);

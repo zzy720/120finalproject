@@ -45,7 +45,7 @@ class Funeral extends Phaser.Scene{
         this.physics.world.setBounds(0, 0, 5000, game.config.height);
         
         //tomb object 
-        this.tomb = this.physics.add.sprite(1000, 480, 'rip');
+        this.tomb = this.physics.add.sprite(300, 480, 'rip');
         this.tomb.body.setCollideWorldBounds(true);
 
         //slime NPC
@@ -65,7 +65,7 @@ class Funeral extends Phaser.Scene{
         });
 
         //interact text
-        this.interact = this.add.text(1000, 370, "press E to interact", scoreConfig);
+        this.interact = this.add.text(300, 370, "press E to interact", scoreConfig);
         this.interactSlime = this.add.text(200, 370, "press E to interact", scoreConfig);
         this.inter = false;
 
@@ -87,7 +87,7 @@ class Funeral extends Phaser.Scene{
                     this.sound.play('button');
                     this.scene.start('puzzleScene');
                 } else {
-                    this.warn = this.add.text(960, 330, "why are you ignoring the slime?", scoreConfig);
+                    this.warn = this.add.text(300, 330, "why are you ignoring the slime?", scoreConfig);
                 }
             } 
         });
@@ -137,6 +137,7 @@ class Funeral extends Phaser.Scene{
 
         //if interact and start conversation then show text
         if(isTalking) {
+            this.main.body.setVelocity(0);
             this.slimetalk();
         } 
 
@@ -154,7 +155,6 @@ class Funeral extends Phaser.Scene{
             this.dialogorder += 1;
             this.dialogue.text = this.slimedialogue[this.dialogorder];
             if(this.dialogorder > this.slimedialogue.length) {
-                console.log("ei");
                 this.back.setVisible(false);
                 this.dialogue.setVisible(false);
                 this.space.setVisible(false);

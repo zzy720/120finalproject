@@ -8,7 +8,7 @@ let config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 200 },
-            debug: true
+            debug: false
         }
     }
 }
@@ -28,6 +28,7 @@ let scoreConfig = {
 
 //reserve key inputs
 let keyA, keyD, keyE, keyS, keySPACE;
+//let keyleft, keyRight, keyE, keyS, keySPACE;
 
 //jumping status
 let isJump = false;
@@ -40,6 +41,6 @@ let isTalking = false;
 
 
 let map;
-let layer;
+let layer,bglayer;
 let tiles;
 let controls;

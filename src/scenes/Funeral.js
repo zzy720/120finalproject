@@ -6,7 +6,6 @@ class Funeral extends Phaser.Scene{
     preload() {
         //load image
 
-        //this.load.image('tony', './assets/character placementtt.png');
         this.load.spritesheet('tony_walk', './assets/character_walk_left.png', {
             frameWidth: 48,
             frameHeight: 85,
@@ -15,7 +14,7 @@ class Funeral extends Phaser.Scene{
         });
         this.load.image('rip', './assets/stone.png');
         this.load.image('slime', './assets/slime.png');
-        //this.load.image('background', './assets/map.png');
+        this.load.image('dialog', './assets/images/dialog.png');
     }
 
     create() {
@@ -38,8 +37,6 @@ class Funeral extends Phaser.Scene{
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
-        //this.background = this.add.sprite(0, 0, 'background').setOrigin(0, 0);
 
         //set world boundary
         this.physics.world.setBounds(0, 0, 5000, game.config.height);
@@ -70,7 +67,7 @@ class Funeral extends Phaser.Scene{
         this.inter = false;
 
         //dialogue box config
-        this.back = this.add.rectangle(0, 320, 640, 160, 0xff6699).setOrigin(0, 0);
+        this.back = this.add.sprite(0, 320, 'dialog').setOrigin(0, 0);
         this.dialogue = this.add.text(40, 360, null, scoreConfig);
         this.space = this.add.text(40, 440, "Press S to continue", scoreConfig);
 

@@ -82,7 +82,7 @@ class Funeral extends Phaser.Scene{
             if(Phaser.Input.Keyboard.JustDown(keyE)){ //if player input
                 if(this.hastalked) { //if talked to slime
                     this.sound.play('button');
-                    this.scene.start('puzzleScene');
+                    this.scene.start('puzzle1Scene');
                 } else {
                     this.warn = this.add.text(300, 330, "why are you ignoring the slime?", scoreConfig);
                 }

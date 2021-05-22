@@ -1,14 +1,14 @@
 // game configuration
 let config = {
-    type: Phaser.CANVAS,
+    type: Phaser.WEBGL,
     width: 640,
     height: 480,
-    scene: [ Menu, Funeral, Puzzle1, Puzzle2 ],
+    scene: [ Puzzle1, Menu, Funeral, Puzzle2],
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 200 },
-            debug: true
+            debug: false
         }
     }
 }

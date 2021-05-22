@@ -32,6 +32,9 @@ class Puzzle1 extends Phaser.Scene{
         this.load.image('purple_door', './assets/images/door2.png');
         this.load.image('key', './assets/images/key.png');
         this.load.image('exit', './assets/images/bigdoor.png');
+        this.load.image('mask', './assets/mask1.png');
+        this.load.image('black', './assets/black.png');
+        
     }
 
     create() {
@@ -289,11 +292,40 @@ class Puzzle1 extends Phaser.Scene{
             tileColor: null, // Color of non-colliding tiles
             collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
             faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        }); */
+        }); */  
+
+        const pic = this.add.sprite(0, 0, 'black').setOrigin(0, 0);
+        this.shape = this.make.graphics();
+
+        this.shape.fillStyle(0xffffff);
+        this.shape.beginPath();
+        this.shape.moveTo(0, 0);
+        this.shape.arc(0, 0, 110, 0, Math.PI * 2);
+
+        this.shape.fillPath();
+
+        const mask = this.shape.createGeometryMask();
+        mask.setInvertAlpha();
+
+        pic.setMask(mask);
+
+        /*
+        this.spotlight = this.make.sprite({
+            x: 100,
+            y: 100,
+            key: 'mask',
+            add: false
+        });
         
+        //layer.mask = new Phaser.Display.Masks.BitmapMask(this, this.spotlight);
+        this.mask = new Phaser.Display.Masks.BitmapMask(this, this.spotlight);
+        */
     }
 
     update() {
         this.main.update();
+        this.shape.x = this.main.x;
+        this.shape.y = this.main.y - 5;
     }
+    
 }

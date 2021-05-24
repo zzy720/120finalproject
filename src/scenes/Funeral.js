@@ -67,7 +67,7 @@ class Funeral extends Phaser.Scene{
         this.inter = false;
 
         //dialogue box config
-        this.back = this.add.sprite(0, 320, 'dialog').setOrigin(0, 0);
+        this.back = this.add.sprite(0, 319, 'dialog').setOrigin(0, 0);
         this.dialogue = this.add.text(40, 360, null, scoreConfig);
         this.space = this.add.text(40, 440, "Press S to continue", scoreConfig);
 

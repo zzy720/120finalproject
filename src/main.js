@@ -3,7 +3,7 @@ let config = {
     type: Phaser.WEBGL,
     width: 640,
     height: 480,
-    scene: [ Puzzle1, Menu, Funeral, Puzzle2],
+    scene: [ Menu, Funeral, Puzzle1, Puzzle2],
     physics: {
         default: 'arcade',
         arcade: {

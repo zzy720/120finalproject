@@ -143,7 +143,7 @@ class Puzzle1 extends Phaser.Scene{
         //puzzle passing condition
         this.physics.add.overlap(this.main, this.exit, () => {
             if(this.isPass) {
-                console.log("yay");
+                this.scene.start('puzzle2Scene');
             } else {
                 console.log("key?");
             }
@@ -218,7 +218,7 @@ class Puzzle1 extends Phaser.Scene{
         //spike colliders
         this.physics.add.collider(this.spikegroup, layer);
         this.physics.add.collider(this.spikegroup, this.main, () => {
-            this.scene.restart();
+            this.reset();
         })
 
         //doors collider
@@ -300,7 +300,7 @@ class Puzzle1 extends Phaser.Scene{
         this.shape.fillStyle(0xffffff);
         this.shape.beginPath();
         this.shape.moveTo(0, 0);
-        this.shape.arc(0, 0, 110, 0, Math.PI * 2);
+        this.shape.arc(0, 0, 180, 0, Math.PI * 2);
 
         this.shape.fillPath();
 
@@ -325,7 +325,11 @@ class Puzzle1 extends Phaser.Scene{
     update() {
         this.main.update();
         this.shape.x = this.main.x;
-        this.shape.y = this.main.y - 5;
+        this.shape.y = this.main.y - 10;
     }
     
+    reset() {
+        this.main.x = 60;
+        this.main.y = 35;
+    }
 }

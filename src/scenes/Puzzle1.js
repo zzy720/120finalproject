@@ -18,16 +18,21 @@ class Puzzle1 extends Phaser.Scene{
         this.load.image('spikes', './assets/images/obstacle.png');
         this.load.spritesheet('controller1', './assets/images/controler1-Sheet.png', {
             frameWidth: 32,
-            frameHeight:32,
-            startFrame: 0,
-            endFrame: 1
+            frameHeight:32
         });
         this.load.spritesheet('controller2', './assets/images/controler2-Sheet.png', {
             frameWidth: 32,
-            frameHeight:32,
-            startFrame: 0,
-            endFrame: 1
+            frameHeight:32
         });
+        this.load.spritesheet('run_left', './assets/L_Run.png', {
+            frameWidth: 32,
+            frameHeight: 64
+        });
+        this.load.spritesheet('run_right', './assets/R_Run.png', {
+            frameWidth: 32,
+            frameHeight: 64
+        });
+
         this.load.image('red_door', './assets/images/door1.png');
         this.load.image('purple_door', './assets/images/door2.png');
         this.load.image('key', './assets/images/key.png');
@@ -48,33 +53,35 @@ class Puzzle1 extends Phaser.Scene{
         //create animation
         this.anims.create({
             key:'stepon',
-            frames: this.anims.generateFrameNumbers('button1',{
-                start: 1,
-                end:1,
-                first: 1
-            }),
+            frames: this.anims.generateFrameNumbers('button1'),
             frameRate: 8
         });
 
         this.anims.create({
             key:'turnknob_red',
-            frames: this.anims.generateFrameNumbers('controller1',{
-                start: 1,
-                end:1,
-                first: 1
-            }),
+            frames: this.anims.generateFrameNumbers('controller1'),
             frameRate: 8
         });
 
         this.anims.create({
             key:'turnknob_purple',
-            frames: this.anims.generateFrameNumbers('controller2',{
-                start: 1,
-                end:1,
-                first: 1
-            }),
+            frames: this.anims.generateFrameNumbers('controller2'),
             frameRate: 8
         });
+
+        this.anims.create({
+            key:'leftrun',
+            frames: this.anims.generateFrameNumbers('run_left'),
+            frameRate: 8
+        });
+
+        this.anims.create({
+            key:'rightrun',
+            frames: this.anims.generateFrameNumbers('run_right'),
+            frameRate: 8
+        });
+
+
         
         //create the map
         this.map = this.add.tilemap('map'); 
@@ -134,8 +141,8 @@ class Puzzle1 extends Phaser.Scene{
         this.exit = this.physics.add.staticSprite(66, 894, 'exit');
 
         //main character
-        this.main = new Tony(this, 60, 35, 'tony_walk', 0).setOrigin(0, 0);
-        this.main.setScale(0.5);
+        this.main = new Tony(this, 60, 35, 'walk_right', 0, 120).setOrigin(0, 0);
+        this.main.setScale(0.7);
         this.physics.add.existing(this.main);
         this.main.body.setCollideWorldBounds(true);
         this.main.body.onWorldBounds = true;
@@ -326,6 +333,13 @@ class Puzzle1 extends Phaser.Scene{
         this.main.update();
         this.shape.x = this.main.x;
         this.shape.y = this.main.y - 10;
+
+        if(isRight) {
+            this.main.anims.play('rightrun', true);
+        }
+        if (isLeft) {
+            this.main.anims.play('leftrun', true);
+        }
     }
     
     reset() {

@@ -6,30 +6,53 @@ class Funeral extends Phaser.Scene{
     preload() {
         //load image
 
-        this.load.spritesheet('tony_walk', './assets/character_walk_left.png', {
-            frameWidth: 48,
-            frameHeight: 85,
-            startFrame: 0,
-            endFrame: 4
+        this.load.spritesheet('walk_left', './assets/L_Walk.png', {
+            frameWidth: 30,
+            frameHeight: 64
         });
+        this.load.spritesheet('walk_right', './assets/R_Walk.png', {
+            frameWidth: 30,
+            frameHeight: 64
+        });
+        this.load.spritesheet('jump_left', './assets/L_Jump.png', {
+            frameWidth: 30,
+            frameHeight: 64
+        });
+        this.load.spritesheet('jump_right', './assets/R_Jump.png', {
+            frameWidth: 30,
+            frameHeight: 64
+        });
+
         this.load.image('rip', './assets/stone.png');
         this.load.image('slime', './assets/slime.png');
         this.load.image('dialog', './assets/images/dialog.png');
+        this.load.image('FuneralBack', './assets/Funeral.png');
     }
 
     create() {
         this.hastalked = false; //talked to slime or not
         this.dialogorder = 0; //dialogue counter
 
-        /* this.anims.create({
-            key:'right',
-            frames: this.anims.generateFrameNumbers('tony_walk',{
-                start: 2,
-                end:4,
-                first: 0
-            }),
-            frameRate: 14,
-        }); */
+        this.anims.create({
+            key:'leftwalk',
+            frames: this.anims.generateFrameNumbers('walk_left'),
+            frameRate: 8
+        }); 
+        this.anims.create({
+            key: 'rightwalk',
+            frames: this.anims.generateFrameNumbers('walk_right'),
+            frameRate: 8
+        });
+        this.anims.create({
+            key:'leftjump',
+            frames: this.anims.generateFrameNumbers('jump_left'),
+            frameRate: 8
+        }); 
+        this.anims.create({
+            key: 'rightjump',
+            frames: this.anims.generateFrameNumbers('jump_right'),
+            frameRate: 8
+        });
 
         //player input definition
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -39,7 +62,9 @@ class Funeral extends Phaser.Scene{
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         //set world boundary
-        this.physics.world.setBounds(0, 0, 5000, game.config.height);
+        this.physics.world.setBounds(0, 0, 1500, game.config.height - 30);
+
+        this.background = this.add.sprite(0, 0, 'FuneralBack').setOrigin(0, 0);
         
         //tomb object 
         this.tomb = this.physics.add.sprite(300, 480, 'rip');
@@ -51,15 +76,16 @@ class Funeral extends Phaser.Scene{
         this.isSlime = false;
 
         //main character
-        this.main = new Tony(this, 100, 480, 'tony_walk', 0).setOrigin(0, 0);
-        this.physics.add.existing(this.main); //add physics
+        this.main = new Tony(this, 100, 400, "walk_right", 0, 100).setOrigin(0, 0);
+        this.physics.add.existing(this.main);
         this.main.body.setCollideWorldBounds(true); //do not go out of the world
         this.main.body.onWorldBounds = true;
 
         //if touches the ground then you can jump, cannot jump mid-air
+        /*
         this.physics.world.on('worldbounds', () => {
             isJump = false;
-        });
+        });*/
 
         //interact text
         this.interact = this.add.text(300, 370, "press E to interact", scoreConfig);
@@ -99,20 +125,23 @@ class Funeral extends Phaser.Scene{
         });
 
         //camera setting
-        this.cameras.main.setBounds(0, 0, 5000, game.config.height); //world bound
+        this.cameras.main.setBounds(0, 0, 1500, game.config.height); //world bound
         this.cameras.main.startFollow(this.main, false, 1, 1, 0, 155); //follow the main character
         
     }
 
     update() {
-
+        isJump = true;
         this.main.update();
 
-        /*
+        
         if(isRight) {
-            this.main.anims.play('right');
+            this.main.anims.play('rightwalk', true);
         }
-        */
+        if (isLeft) {
+            this.main.anims.play('leftwalk', true);
+        }
+        
 
         //if overlap then show interaction text
         if(this.inter) {

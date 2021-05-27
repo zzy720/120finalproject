@@ -3,7 +3,7 @@ let config = {
     type: Phaser.WEBGL,
     width: 640,
     height: 480,
-    scene: [ Menu, Funeral, Puzzle1, Puzzle2],
+    scene: [Menu, Funeral, Puzzle1, Puzzle2],
     physics: {
         default: 'arcade',
         arcade: {
@@ -28,13 +28,13 @@ let scoreConfig = {
 
 //reserve key inputs
 let keyA, keyD, keyE, keyS, keySPACE;
-//let keyleft, keyRight, keyE, keyS, keySPACE;
 
 //jumping status
 let isJump = false;
 
 //moving status
 let isLeft, isRight = false;
+let isRunningLeft, isRunningRight = false;
 
 //talking status
 let isTalking = false;

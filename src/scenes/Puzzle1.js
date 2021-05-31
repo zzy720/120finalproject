@@ -168,10 +168,11 @@ class Puzzle1 extends Phaser.Scene{
         
         //spawn buttons
         this.physics.add.collider(this.buttongroup, layer);
-        this.button1 = this.buttongroup.create(380,123, 'button-up');
-        this.button1_sub = this.buttongroup.create(380,115, 'button-up');
+        this.button1 = this.buttongroup.create(375,123, 'button-up');
+        this.button1.setSize(32,16);
+        this.button1_sub = this.buttongroup.create(375,115, 'button-up');
         this.button1_sub.alpha = 0;
-        this.button1_sub.body.setSize(20, 3);
+        this.button1_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button1, this.button1_sub);
         this.physics.add.collider(this.button1, this.main, () => {
             isJump = false;
@@ -213,7 +214,7 @@ class Puzzle1 extends Phaser.Scene{
 
 
         //spawn floor_doors
-        this.floordoor1 = this.floor_door_group.create(223, 136, 'floor_door');
+        this.floordoor1 = this.floor_door_group.create(224, 135, 'floor_door');
         this.floordoor2 = this.floor_door_group.create(864, 680, 'floor_door');
         this.floordoor3 = this.floor_door_group.create(320, 807, 'floor_door' );
 

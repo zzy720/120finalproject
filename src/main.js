@@ -29,11 +29,8 @@ let scoreConfig = {
 //reserve key inputs
 let keyA, keyD, keyE, keyS, keySPACE;
 
-//jumping status
-let isJump = false;
-
 //moving status
-let isLeft, isRight = false;
+let isLeft, isRight, isJump, isStop = false;
 let isRunningLeft, isRunningRight = false;
 
 //talking status

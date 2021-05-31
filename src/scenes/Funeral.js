@@ -7,21 +7,30 @@ class Funeral extends Phaser.Scene{
         //load image
 
         this.load.spritesheet('walk_left', './assets/L_Walk.png', {
-            frameWidth: 30,
-            frameHeight: 64
+            frameWidth: 48,
+            frameHeight: 80
         });
         this.load.spritesheet('walk_right', './assets/R_Walk.png', {
-            frameWidth: 30,
-            frameHeight: 64
+            frameWidth: 48,
+            frameHeight: 80
         });
         this.load.spritesheet('jump_left', './assets/L_Jump.png', {
-            frameWidth: 30,
-            frameHeight: 64
+            frameWidth: 48,
+            frameHeight: 80
         });
         this.load.spritesheet('jump_right', './assets/R_Jump.png', {
-            frameWidth: 30,
-            frameHeight: 64
+            frameWidth: 48,
+            frameHeight: 80
         });
+        this.load.spritesheet('idle_right', './assets/L_Idle.png', {
+            frameWidth: 48,
+            frameHeight: 80
+        });
+        this.load.spritesheet('idle_left', './assets/R_Idle.png', {
+            frameWidth: 48,
+            frameHeight: 80
+        });
+        
 
         this.load.image('rip', './assets/stone.png');
         this.load.image('slime', './assets/slime.png');
@@ -30,6 +39,7 @@ class Funeral extends Phaser.Scene{
     }
 
     create() {
+        isRight = true; //initially facing right
         this.hastalked = false; //talked to slime or not
         this.dialogorder = 0; //dialogue counter
 
@@ -53,6 +63,17 @@ class Funeral extends Phaser.Scene{
             frames: this.anims.generateFrameNumbers('jump_right'),
             frameRate: 8
         });
+        this.anims.create({
+            key:'leftidle',
+            frames: this.anims.generateFrameNumbers('idle_left'),
+            frameRate: 3
+        }); 
+        this.anims.create({
+            key: 'rightidle',
+            frames: this.anims.generateFrameNumbers('idle_right'),
+            frameRate: 3
+        });
+
 
         //player input definition
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -134,13 +155,22 @@ class Funeral extends Phaser.Scene{
         isJump = true;
         this.main.update();
 
-        
-        if(isRight) {
-            this.main.anims.play('rightwalk', true);
+        if(!isStop){
+            if(isRight) {
+                this.main.anims.play('rightwalk', true);
+            }
+            if (isLeft) {
+                this.main.anims.play('leftwalk', true);
+            }
+        } else {
+            if(isRight) {
+                this.main.anims.play('rightidle', true);
+            }
+            if (isLeft) {
+                this.main.anims.play('leftidle', true);
+            }
         }
-        if (isLeft) {
-            this.main.anims.play('leftwalk', true);
-        }
+
         
 
         //if overlap then show interaction text

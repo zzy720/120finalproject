@@ -3,12 +3,12 @@ let config = {
     type: Phaser.WEBGL,
     width: 640,
     height: 480,
-    scene: [Menu, Funeral, Puzzle1, Puzzle2],
+    scene: [ Menu, Funeral, Puzzle1, Puzzle2 ],
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 200 },
-            debug: true
+            debug: false
         }
     }
 }
@@ -34,7 +34,7 @@ let isLeft, isRight, isJump, isStop = false;
 let isRunningLeft, isRunningRight = false;
 
 //talking status
-let isTalking = false;
+let isTalkingCousin3, isTalkingCousin4 = false;
 
 
 let map;

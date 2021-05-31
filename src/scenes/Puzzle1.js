@@ -43,6 +43,7 @@ class Puzzle1 extends Phaser.Scene{
     create() {
 
         isRight = true; //intially facing right
+        
         //controller control count initialize
         this.control_red = 1;
         this.control_purple = 1;
@@ -127,12 +128,12 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.world.setBounds(0, 0, 1000, 1000);
 
         //spawn the puzzle exit
-        this.exit = this.physics.add.staticSprite(66, 894, 'exit');
+        this.exit = this.physics.add.staticSprite(63, 897, 'exit');
 
         //main character
         this.main = new Tony(this, 60, 35, 'walk_right', 0, 120).setOrigin(0, 0);
         this.physics.add.existing(this.main);
-        this.main.setScale(0.5);
+        this.main.setScale(0.6);
         this.main.body.setSize(48, 75); 
         this.main.body.setCollideWorldBounds(true);
         this.main.body.onWorldBounds = true;
@@ -156,7 +157,7 @@ class Puzzle1 extends Phaser.Scene{
         });
 
         //spawn key
-        this.key = this.physics.add.staticSprite(310, 362, 'key');
+        this.key = this.physics.add.staticSprite(310, 365, 'key');
         this.key.setScale(0.8);
         this.key.body.setSize(20, 40);
         this.physics.add.overlap(this.key, this.main, () => {
@@ -184,10 +185,10 @@ class Puzzle1 extends Phaser.Scene{
             this.interact.alpha = 0;
         });
         
-        this.button2 = this.buttongroup.create(310, 250, 'button-up');
-        this.button2_sub = this.buttongroup.create(310, 242, 'button-up');
+        this.button2 = this.buttongroup.create(310, 252, 'button-up');
+        this.button2_sub = this.buttongroup.create(310, 244, 'button-up');
         this.button2_sub.alpha = 0;
-        this.button2_sub.body.setSize(20, 3);
+        this.button2_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button2, this.button2_sub);
         this.physics.add.collider(this.button2, this.main, () => {
             isJump = false;
@@ -198,10 +199,10 @@ class Puzzle1 extends Phaser.Scene{
             this.floordoor2.destroy();
         });
 
-        this.button3 = this.buttongroup.create(90, 791, 'button1');
-        this.button3_sub = this.buttongroup.create(90, 783, 'button1');
+        this.button3 = this.buttongroup.create(85, 797, 'button-up');
+        this.button3_sub = this.buttongroup.create(85, 789, 'button-up');
         this.button3_sub.alpha = 0;
-        this.button3_sub.body.setSize(20, 3);
+        this.button3_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button3, this.button3_sub);
         this.physics.add.collider(this.button3, this.main, () => {
             isJump = false;
@@ -216,7 +217,7 @@ class Puzzle1 extends Phaser.Scene{
         //spawn floor_doors
         this.floordoor1 = this.floor_door_group.create(224, 135, 'floor_door');
         this.floordoor2 = this.floor_door_group.create(864, 680, 'floor_door');
-        this.floordoor3 = this.floor_door_group.create(320, 807, 'floor_door' );
+        this.floordoor3 = this.floor_door_group.create(320, 808, 'floor_door' );
 
         //add colliders for the floor_door_group
         this.physics.add.collider(this.floor_door_group, layer);
@@ -237,18 +238,18 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.add.collider(this.purple_door_group, this.main);
 
         //spawn doors 
-        this.red_door_1 = this.red_door_group.create(434, 223, 'red_door');
-        this.red_door_2 = this.red_door_group.create(142, 770, 'red_door');
-        this.purple_door_1 = this.purple_door_group.create(434, 350, 'purple_door');
-        this.purple_door_2 = this.purple_door_group.create(142, 896, "purple_door");
+        this.red_door_1 = this.red_door_group.create(425, 224, 'red_door');
+        this.red_door_2 = this.red_door_group.create(136, 768, 'red_door');
+        this.purple_door_1 = this.purple_door_group.create(425, 352, 'purple_door');
+        this.purple_door_2 = this.purple_door_group.create(137, 896, "purple_door");
 
         //controller colliders
         this.physics.add.collider(this.controllergroup, layer);
         this.physics.add.collider(this.controllergroup, this.main);
 
         //spawn controllers
-        this.controller1 = this.controllergroup.create(610, 400, 'controller1-left');
-        this.controller1_sub = this.physics.add.staticSprite(610, 400, 'controller1-left');
+        this.controller1 = this.controllergroup.create(610, 402, 'controller1-left');
+        this.controller1_sub = this.physics.add.staticSprite(610, 402, 'controller1-left');
         this.controller1_sub.body.setSize(64,32);
         this.controller1_sub.alpha = 0;
         this.physics.add.overlap(this.controller1_sub, this.main, () => {

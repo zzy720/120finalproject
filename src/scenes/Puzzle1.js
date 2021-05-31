@@ -16,14 +16,10 @@ class Puzzle1 extends Phaser.Scene{
         });
         this.load.image('floor_door', './assets/images/door.png');
         this.load.image('spikes', './assets/images/obstacle.png');
-        this.load.spritesheet('controller1', './assets/images/controler1-Sheet.png', {
-            frameWidth: 32,
-            frameHeight:32
-        });
-        this.load.spritesheet('controller2', './assets/images/controler2-Sheet.png', {
-            frameWidth: 32,
-            frameHeight:32
-        });
+        this.load.image('controller1-left', './assets/images/controler1.png');
+        this.load.image('controller1-right', './assets/images/controler1-1.png');
+        this.load.image('controller2-left', './assets/images/controler2.png');
+        this.load.image('controller2-right', './assets/images/controler2-1.png');
         this.load.spritesheet('run_left', './assets/L_Run.png', {
             frameWidth: 32,
             frameHeight: 64
@@ -56,19 +52,6 @@ class Puzzle1 extends Phaser.Scene{
             frames: this.anims.generateFrameNumbers('button1'),
             frameRate: 8
         });
-
-        this.anims.create({
-            key:'turnknob_red',
-            frames: this.anims.generateFrameNumbers('controller1'),
-            frameRate: 8
-        });
-
-        this.anims.create({
-            key:'turnknob_purple',
-            frames: this.anims.generateFrameNumbers('controller2'),
-            frameRate: 8
-        });
-
         this.anims.create({
             key:'leftrun',
             frames: this.anims.generateFrameNumbers('run_left'),
@@ -88,7 +71,6 @@ class Puzzle1 extends Phaser.Scene{
         let tiles = this.map.addTilesetImage('tilesets','tiles');  // set tileset name
         let tiles2 = this.map.addTilesetImage('tilesets2','tiles2');
         let backgroundlayer = this.map.createLayer('background',[tiles2]);
-        let layer = this.map.createLayer('ground',[tiles]);  // set layer name
                 
 
         //interaction guide
@@ -133,7 +115,8 @@ class Puzzle1 extends Phaser.Scene{
         this.spike5 = this.spikegroup.create(700, 280, 'spikes');
         this.spike6 = this.spikegroup.create(540, 923, 'spikes');
 
-
+        
+        let layer = this.map.createLayer('ground',[tiles]);  // set layer name
         layer.setCollisionByProperty({ collides: true });
         this.physics.world.setBounds(0, 0, 1000, 1000);
 
@@ -245,19 +228,20 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.add.collider(this.controllergroup, this.main);
 
         //spawn controllers
-        this.controller1 = this.controllergroup.create(610, 400, 'controller1');
-        this.controller1_sub = this.physics.add.staticSprite(610, 400, 'controller1');
+        this.controller1 = this.controllergroup.create(610, 400, 'controller1-left');
+        this.controller1_sub = this.physics.add.staticSprite(610, 400, 'controller1-left');
         this.controller1_sub.body.setSize(64,32);
         this.controller1_sub.alpha = 0;
         this.physics.add.overlap(this.controller1_sub, this.main, () => {
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
-                this.controller1.anims.play('turnknob_red');
                 if(this.control_red % 2 == 0){
+                    this.controller1.setTexture('controller1-left');
                     this.red_door_1.setActive(true).setVisible(true);
                     this.red_door_2.setActive(false).setVisible(false);
                     this.red_door_1.body.enable = true;
                     this.red_door_2.body.enable = false;
                 } else {
+                    this.controller1.setTexture('controller1-right');
                     this.red_door_1.setActive(false).setVisible(false);
                     this.red_door_2.setActive(true).setVisible(true);
                     this.red_door_2.body.enable = true;
@@ -267,19 +251,20 @@ class Puzzle1 extends Phaser.Scene{
             }
         })
 
-        this.controller2 = this.controllergroup.create(438, 913, 'controller2');
-        this.controller2_sub = this.physics.add.staticSprite(438, 913, 'controller2');
+        this.controller2 = this.controllergroup.create(438, 913, 'controller2-left');
+        this.controller2_sub = this.physics.add.staticSprite(438, 913, 'controller2-left');
         this.controller2_sub.body.setSize(64,32);
         this.controller2_sub.alpha = 0;
         this.physics.add.overlap(this.controller2_sub, this.main, () => {
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
-                this.controller2.anims.play('turnknob_purple');
                 if(this.control_purple % 2 == 0){
+                    this.controller2.setTexture('controller2-left');
                     this.purple_door_1.setActive(true).setVisible(true);
                     this.purple_door_2.setActive(false).setVisible(false);
                     this.purple_door_1.body.enable = true;
                     this.purple_door_2.body.enable = false;
                 } else {
+                    this.controller2.setTexture('controller2-right');
                     this.purple_door_1.setActive(false).setVisible(false);
                     this.purple_door_2.setActive(true).setVisible(true);
                     this.purple_door_2.body.enable = true;

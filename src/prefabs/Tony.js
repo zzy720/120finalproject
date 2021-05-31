@@ -27,8 +27,8 @@ class Tony extends Phaser.GameObjects.Sprite {
         }
 
         if (Phaser.Input.Keyboard.JustDown(keySPACE) && !isJump) { //jump
-            this.body.setVelocityY(-150);
-            isStop = false;
+            this.body.setVelocityY(-120);
+            isStop = true;
             isJump = true;
         }
     }

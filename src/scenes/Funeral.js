@@ -14,14 +14,6 @@ class Funeral extends Phaser.Scene{
             frameWidth: 48,
             frameHeight: 80
         });
-        this.load.spritesheet('jump_left', './assets/L_Jump.png', {
-            frameWidth: 48,
-            frameHeight: 80
-        });
-        this.load.spritesheet('jump_right', './assets/R_Jump.png', {
-            frameWidth: 48,
-            frameHeight: 80
-        });
         this.load.spritesheet('idle_right', './assets/L_Idle.png', {
             frameWidth: 48,
             frameHeight: 80
@@ -51,16 +43,6 @@ class Funeral extends Phaser.Scene{
         this.anims.create({
             key: 'rightwalk',
             frames: this.anims.generateFrameNumbers('walk_right'),
-            frameRate: 8
-        });
-        this.anims.create({
-            key:'leftjump',
-            frames: this.anims.generateFrameNumbers('jump_left'),
-            frameRate: 8
-        }); 
-        this.anims.create({
-            key: 'rightjump',
-            frames: this.anims.generateFrameNumbers('jump_right'),
             frameRate: 8
         });
         this.anims.create({

@@ -28,6 +28,7 @@ let scoreConfig = {
 
 //reserve key inputs
 let keyA, keyD, keyE, keyS, keySPACE;
+let keyF; //cheat code
 
 //moving status
 let isLeft, isRight, isJump, isStop = false;

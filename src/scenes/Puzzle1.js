@@ -93,6 +93,7 @@ class Puzzle1 extends Phaser.Scene{
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
         //create groups for items
         this.spikegroup = this.physics.add.staticGroup({ //group for spike obstacle
@@ -343,6 +344,12 @@ class Puzzle1 extends Phaser.Scene{
     }
 
     update() {
+
+        if(Phaser.Input.Keyboard.JustDown(keyF)) {
+            this.isPass = true;
+            this.scene.start('puzzle2Scene');
+        }
+        
         this.main.update();
         this.shape.x = this.main.x;
         this.shape.y = this.main.y - 10;

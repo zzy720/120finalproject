@@ -5,7 +5,7 @@ class Puzzle2 extends Phaser.Scene {
 
     preload() {
         this.load.tilemapTiledJSON('map2', 'assets/tilemaps/tilemap2.json')
-        this.load.image('tiles3', 'assets/tilemaps/tileset3.png');  //1024*1024
+        this.load.image('tiles3', 'assets/tilemaps/tileset3new.png');  //1024*1024
     }
 
     create() {

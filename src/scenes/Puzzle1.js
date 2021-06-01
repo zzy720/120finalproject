@@ -9,6 +9,7 @@ class Puzzle1 extends Phaser.Scene{
         this.load.image('tiles', 'assets/tilemaps/tilesets.png');  
         this.load.image('tiles2', 'assets/tilemaps/tilesets2.png'); 
         this.load.image('floor_door', './assets/images/door.png');
+        this.load.image('floor_door_open', './assets/images/door-0.png');
         this.load.image('spikes', './assets/images/obstacle.png');
         this.load.image('controller1-left', './assets/images/controler1.png');
         this.load.image('controller1-right', './assets/images/controler1-1.png');
@@ -41,6 +42,8 @@ class Puzzle1 extends Phaser.Scene{
     }
 
     create() {
+        
+        console.log('11');
 
         isRight = true; //intially facing right
         
@@ -159,7 +162,6 @@ class Puzzle1 extends Phaser.Scene{
         //spawn key
         this.key = this.physics.add.staticSprite(310, 365, 'key');
         this.key.setScale(0.6);
-        this.key.body.setSize(20, 40);
         this.physics.add.overlap(this.key, this.main, () => {
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
                 this.key.destroy();
@@ -169,9 +171,9 @@ class Puzzle1 extends Phaser.Scene{
         
         //spawn buttons
         this.physics.add.collider(this.buttongroup, layer);
-        this.button1 = this.buttongroup.create(375,123, 'button-up');
+        this.button1 = this.buttongroup.create(375,120, 'button-up');
         this.button1.setSize(32,16);
-        this.button1_sub = this.buttongroup.create(375,115, 'button-up');
+        this.button1_sub = this.buttongroup.create(375,112, 'button-up');
         this.button1_sub.alpha = 0;
         this.button1_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button1, this.button1_sub);
@@ -181,12 +183,14 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.add.overlap(this.button1_sub, this.main, () => {
             isJump = false;
             this.button1.setTexture('button-down');
-            this.floordoor1.destroy();
+            this.floordoor1.setTexture('floor_door_open');
+            this.floordoor1.setActive(false);
+            this.floordoor1.body.enable = false;
             this.interact.alpha = 0;
         });
         
-        this.button2 = this.buttongroup.create(310, 252, 'button-up');
-        this.button2_sub = this.buttongroup.create(310, 244, 'button-up');
+        this.button2 = this.buttongroup.create(310, 250, 'button-up');
+        this.button2_sub = this.buttongroup.create(310, 242, 'button-up');
         this.button2_sub.alpha = 0;
         this.button2_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button2, this.button2_sub);
@@ -196,11 +200,13 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.add.overlap(this.button2_sub, this.main, () => {
             isJump = false;
             this.button2.setTexture('button-down');
-            this.floordoor2.destroy();
+            this.floordoor2.setTexture('floor_door_open');
+            this.floordoor2.setActive(false);
+            this.floordoor2.body.enable = false;
         });
 
-        this.button3 = this.buttongroup.create(85, 797, 'button-up');
-        this.button3_sub = this.buttongroup.create(85, 789, 'button-up');
+        this.button3 = this.buttongroup.create(85, 795, 'button-up');
+        this.button3_sub = this.buttongroup.create(85, 787, 'button-up');
         this.button3_sub.alpha = 0;
         this.button3_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button3, this.button3_sub);
@@ -210,14 +216,16 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.add.overlap(this.button3_sub, this.main, () => {
             isJump = false;
             this.button3.setTexture('button-down');
-            this.floordoor3.destroy();
+            this.floordoor3.setTexture('floor_door_open');
+            this.floordoor3.setActive(false);
+            this.floordoor3.body.enable = false;
         });
 
 
         //spawn floor_doors
         this.floordoor1 = this.floor_door_group.create(224, 135, 'floor_door');
         this.floordoor2 = this.floor_door_group.create(864, 680, 'floor_door');
-        this.floordoor3 = this.floor_door_group.create(320, 808, 'floor_door' );
+        this.floordoor3 = this.floor_door_group.create(320, 808, 'floor_door');
 
         //add colliders for the floor_door_group
         this.physics.add.collider(this.floor_door_group, layer);

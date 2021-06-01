@@ -134,10 +134,13 @@ class Funeral extends Phaser.Scene{
         this.background = this.add.sprite(0, 0, 'FuneralBack').setOrigin(0, 0);
         
         //tomb object 
-        this.tomb = this.physics.add.sprite(1488, 480, 'rip');
-        this.tomb.body.setCollideWorldBounds(true);
+        this.tomb = this.physics.add.staticSprite(1400, 430, 'rip');
         this.interact = this.add.text(1480, 370, "press E to interact", scoreConfig);
         this.inter = false;
+
+        this.tomb_sub = this.physics.add.staticSprite(1400, 430, 'rip');
+        this.tomb_sub.alpha = 0;
+        this.tomb_sub.body.setSize(120, 48);
 
         //grandma NPC
         this.grandma = this.physics.add.sprite(620, 450, 'grandma');
@@ -158,7 +161,7 @@ class Funeral extends Phaser.Scene{
         this.interactCousin4 = this.add.text(400, 370, "press E to interact", scoreConfig);
 
         //main character
-        this.main = new Tony(this, 100, 400, "walk_right", 0, 100).setOrigin(0, 0);
+        this.main = new Tony(this, 100, 400, "walk_right", 0, 300).setOrigin(0, 0);
         this.physics.add.existing(this.main);
         this.main.body.setCollideWorldBounds(true); //do not go out of the world
         this.main.body.onWorldBounds = true;
@@ -174,12 +177,13 @@ class Funeral extends Phaser.Scene{
         this.space.setActive(false).setVisible(false);
 
         //set interaction
-        this.physics.add.overlap(this.main, this.tomb, () => {
+        this.physics.add.collider(this.main, this.tomb);
+        this.physics.add.overlap(this.main, this.tomb_sub, () => {
             this.inter = true; //show instruction
             if(Phaser.Input.Keyboard.JustDown(keyE)){ //if player input
                 if(this.hastalked) { //if talked to cousin4
                     this.sound.play('button');
-                    this.scene.start('puzzle1Scene');
+                    this.scene.start('puzzle2Scene');
                 } else {
                     this.warn = this.add.text(300, 330, "why are you ignoring the cousin4?", scoreConfig);
                 }

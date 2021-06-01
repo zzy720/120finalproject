@@ -54,7 +54,11 @@ class Funeral extends Phaser.Scene{
 
         this.load.image('rip', './assets/Grave.png');
         this.load.image('dialog', './assets/images/dialog.png');
-        this.load.image('FuneralBack', './assets/Funeral-test.png');
+        this.load.image('FuneralBack', './assets/Funeral.png');
+        this.load.spritesheet('rain', './assets/Rain_Animation.png', {
+            frameWidth: 1500,
+            frameHeight: 480
+        })
     }
 
     create() {
@@ -118,6 +122,12 @@ class Funeral extends Phaser.Scene{
             frameRate: 4
         });
 
+        this.anims.create({
+            key: 'raindrop',
+            frames: this.anims.generateFrameNumbers('rain'),
+            frameRate: 20
+        });
+
 
 
 
@@ -141,6 +151,8 @@ class Funeral extends Phaser.Scene{
         this.tomb_sub = this.physics.add.staticSprite(1400, 430, 'rip');
         this.tomb_sub.alpha = 0;
         this.tomb_sub.body.setSize(120, 48);
+
+        this.rain = this.add.sprite(0, 0, 'rain').setOrigin(0, 0);
 
         //grandma NPC
         this.grandma = this.physics.add.sprite(620, 450, 'grandma');
@@ -183,7 +195,7 @@ class Funeral extends Phaser.Scene{
             if(Phaser.Input.Keyboard.JustDown(keyE)){ //if player input
                 if(this.hastalked) { //if talked to cousin4
                     this.sound.play('button');
-                    this.scene.start('puzzle2Scene');
+                    this.scene.start('puzzle1Scene');
                 } else {
                     this.warn = this.add.text(300, 330, "why are you ignoring the cousin4?", scoreConfig);
                 }
@@ -226,6 +238,7 @@ class Funeral extends Phaser.Scene{
         
         this.cousin3.anims.play('cousin3idle', true);
         this.cousin4.anims.play('cousin4idle', true);
+        this.rain.anims.play('raindrop', true);
 
         if(!isStop){
             if(isRight) {

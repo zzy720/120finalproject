@@ -41,7 +41,14 @@ class Funeral extends Phaser.Scene{
             frameWidth: 22,
             frameHeight: 53
         });
-        
+        this.load.spritesheet('grandma', './assets/Grandma.png', {
+            frameWidth: 31,
+            frameHeight: 74
+        });
+        this.load.spritesheet('grandpa', './assets/Grandpa.png', {
+            frameWidth: 32,
+            frameHeight: 87
+        });
 
         
 
@@ -89,15 +96,28 @@ class Funeral extends Phaser.Scene{
             key: 'cousin2idle',
             frames: this.anims.generateFrameNumbers('cousin2'),
             frameRate: 3
-        });        this.anims.create({
+        });       
+         this.anims.create({
             key: 'cousin3idle',
             frames: this.anims.generateFrameNumbers('cousin3'),
             frameRate: 3
-        });        this.anims.create({
+        });        
+        this.anims.create({
             key: 'cousin4idle',
             frames: this.anims.generateFrameNumbers('cousin4'),
             frameRate: 4
         });
+        this.anims.create({
+            key: 'grandmaidle',
+            frames: this.anims.generateFrameNumbers('grandma'),
+            frameRate: 4
+        });
+        this.anims.create({
+            key: 'grandpaidle',
+            frames: this.anims.generateFrameNumbers('grandpa'),
+            frameRate: 4
+        });
+
 
 
 
@@ -118,6 +138,12 @@ class Funeral extends Phaser.Scene{
         this.tomb.body.setCollideWorldBounds(true);
         this.interact = this.add.text(1480, 370, "press E to interact", scoreConfig);
         this.inter = false;
+
+        //grandma NPC
+        this.grandma = this.physics.add.sprite(620, 450, 'grandma');
+        this.grandma.body.setCollideWorldBounds(true);
+        this.isGrandma = false;
+        this.interactGrandma = this.add.text(620, 370, "press E to interact", scoreConfig);
 
         //cousin3 NPC
         this.cousin3 = this.physics.add.sprite(600, 450, 'cousin3');
@@ -153,7 +179,7 @@ class Funeral extends Phaser.Scene{
             if(Phaser.Input.Keyboard.JustDown(keyE)){ //if player input
                 if(this.hastalked) { //if talked to cousin4
                     this.sound.play('button');
-                    this.scene.start('puzzle2Scene');
+                    this.scene.start('puzzle1Scene');
                 } else {
                     this.warn = this.add.text(300, 330, "why are you ignoring the cousin4?", scoreConfig);
                 }

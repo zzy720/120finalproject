@@ -158,7 +158,7 @@ class Puzzle1 extends Phaser.Scene{
 
         //spawn key
         this.key = this.physics.add.staticSprite(310, 365, 'key');
-        this.key.setScale(0.8);
+        this.key.setScale(0.6);
         this.key.body.setSize(20, 40);
         this.physics.add.overlap(this.key, this.main, () => {
             if(Phaser.Input.Keyboard.JustDown(keyE)) {

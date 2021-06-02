@@ -43,8 +43,6 @@ class Puzzle1 extends Phaser.Scene{
 
     create() {
         
-        console.log('11');
-
         isRight = true; //intially facing right
         
         //controller control count initialize
@@ -173,8 +171,8 @@ class Puzzle1 extends Phaser.Scene{
         //spawn buttons
         this.physics.add.collider(this.buttongroup, layer);
         this.button1 = this.buttongroup.create(375,120, 'button-up');
-        this.button1.setSize(32,16);
-        this.button1_sub = this.buttongroup.create(375,112, 'button-up');
+        this.button1.setSize(32,7);
+        this.button1_sub = this.buttongroup.create(375,115, 'button-up');
         this.button1_sub.alpha = 0;
         this.button1_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button1, this.button1_sub);
@@ -191,7 +189,8 @@ class Puzzle1 extends Phaser.Scene{
         });
         
         this.button2 = this.buttongroup.create(310, 250, 'button-up');
-        this.button2_sub = this.buttongroup.create(310, 242, 'button-up');
+        this.button2.setSize(32, 7);
+        this.button2_sub = this.buttongroup.create(310, 245, 'button-up');
         this.button2_sub.alpha = 0;
         this.button2_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button2, this.button2_sub);
@@ -207,7 +206,8 @@ class Puzzle1 extends Phaser.Scene{
         });
 
         this.button3 = this.buttongroup.create(85, 795, 'button-up');
-        this.button3_sub = this.buttongroup.create(85, 787, 'button-up');
+        this.button3.setSize(32, 7);
+        this.button3_sub = this.buttongroup.create(85, 7, 'button-up');
         this.button3_sub.alpha = 0;
         this.button3_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button3, this.button3_sub);

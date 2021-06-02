@@ -234,7 +234,8 @@ class Funeral extends Phaser.Scene{
 
         
         this.back.setPosition(this.main.x, this.main.y + 30);
-        this.dialogue.setPosition(this.back.x - 60, this.back.y - 20);
+        this.dialogue.setPosition(this.back.x - 270, this.back.y - 40);
+        this.space.setPosition(this.dialogue.x, this.dialogue.y + 75);
         
         this.cousin3.anims.play('cousin3idle', true);
         this.cousin4.anims.play('cousin4idle', true);

@@ -42,7 +42,7 @@ class Puzzle1 extends Phaser.Scene{
     }
 
     create() {
-        
+
         isRight = true; //intially facing right
         
         //controller control count initialize
@@ -224,9 +224,9 @@ class Puzzle1 extends Phaser.Scene{
 
 
         //spawn floor_doors
-        this.floordoor1 = this.floor_door_group.create(224, 135, 'floor_door');
-        this.floordoor2 = this.floor_door_group.create(864, 680, 'floor_door');
-        this.floordoor3 = this.floor_door_group.create(320, 808, 'floor_door');
+        this.floordoor1 = this.floor_door_group.create(224, 144, 'floor_door');
+        this.floordoor2 = this.floor_door_group.create(864, 689, 'floor_door');
+        this.floordoor3 = this.floor_door_group.create(320, 816, 'floor_door');
 
         //add colliders for the floor_door_group
         this.physics.add.collider(this.floor_door_group, layer);

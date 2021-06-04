@@ -41,13 +41,9 @@ class Funeral extends Phaser.Scene{
             frameWidth: 22,
             frameHeight: 53
         });
-        this.load.spritesheet('grandma', './assets/Grandma.png', {
-            frameWidth: 31,
-            frameHeight: 74
-        });
-        this.load.spritesheet('grandpa', './assets/Grandpa.png', {
-            frameWidth: 32,
-            frameHeight: 87
+        this.load.spritesheet('grandparents', './assets/grandparents.png', {
+            frameWidth: 80,
+            frameHeight: 88
         });
 
         
@@ -113,13 +109,8 @@ class Funeral extends Phaser.Scene{
         });
         this.anims.create({
             key: 'grandmaidle',
-            frames: this.anims.generateFrameNumbers('grandma'),
-            frameRate: 4
-        });
-        this.anims.create({
-            key: 'grandpaidle',
-            frames: this.anims.generateFrameNumbers('grandpa'),
-            frameRate: 4
+            frames: this.anims.generateFrameNumbers('grandparents'),
+            frameRate: 1
         });
 
         this.anims.create({
@@ -144,21 +135,21 @@ class Funeral extends Phaser.Scene{
         this.background = this.add.sprite(0, 0, 'FuneralBack').setOrigin(0, 0);
         
         //tomb object 
-        this.tomb = this.physics.add.staticSprite(1400, 430, 'rip');
+        this.tomb = this.physics.add.staticSprite(1400, 419, 'rip');
         this.interact = this.add.text(1480, 370, "press E to interact", scoreConfig);
         this.inter = false;
 
-        this.tomb_sub = this.physics.add.staticSprite(1400, 430, 'rip');
+        this.tomb_sub = this.physics.add.staticSprite(1400, 419, 'rip');
         this.tomb_sub.alpha = 0;
         this.tomb_sub.body.setSize(120, 48);
 
         this.rain = this.add.sprite(0, 0, 'rain').setOrigin(0, 0);
 
-        //grandma NPC
-        this.grandma = this.physics.add.sprite(620, 450, 'grandma');
-        this.grandma.body.setCollideWorldBounds(true);
-        this.isGrandma = false;
-        this.interactGrandma = this.add.text(620, 370, "press E to interact", scoreConfig);
+        //grandparents NPC
+        this.grandparents = this.physics.add.sprite(620, 450, 'grandparents');
+        this.grandparents.body.setCollideWorldBounds(true);
+        this.isGrandparents = false;
+        this.interactGrandparents = this.add.text(620, 370, "press E to interact", scoreConfig);
 
         //cousin3 NPC
         this.cousin3 = this.physics.add.sprite(600, 450, 'cousin3');
@@ -182,6 +173,7 @@ class Funeral extends Phaser.Scene{
         this.back = this.add.sprite(0, 319, 'dialog');
         this.dialogue = this.add.text(40, 360, 'null', scoreConfig).setOrigin(0, 0);
         this.space = this.add.text(40, 440, "Press S to continue", scoreConfig);
+        this.typing = this.add.text(100, 100, '', scoreConfig);
 
         //set to invisible when not activated
         this.back.setActive(false).setVisible(false);
@@ -205,7 +197,7 @@ class Funeral extends Phaser.Scene{
         //set interaction
         this.physics.add.overlap(this.main, this.cousin4, () => {
             this.isCousin4 = true;
-            if(Phaser.Input.Keyboard.JustDown(keyE)) {
+            if(keyE.isDown) {
                 this.sound.play('button');
                 isTalkingCousin4 = true;
             }
@@ -224,7 +216,6 @@ class Funeral extends Phaser.Scene{
         //camera setting
         this.cameras.main.setBounds(0, 0, 1500, game.config.height); //world bound
         this.cameras.main.startFollow(this.main, false, 1, 1, 0, 155); //follow the main character
-        
     }
 
     update() {
@@ -235,10 +226,12 @@ class Funeral extends Phaser.Scene{
         
         this.back.setPosition(this.main.x, this.main.y + 30);
         this.dialogue.setPosition(this.back.x - 270, this.back.y - 40);
-        this.space.setPosition(this.dialogue.x, this.dialogue.y + 75);
+        this.typing.setPosition(this.back.x - 270, this.back.y - 40);
+        this.space.setPosition(this.typing.x, this.typing.y + 75);
         
         this.cousin3.anims.play('cousin3idle', true);
         this.cousin4.anims.play('cousin4idle', true);
+        this.grandparents.anims.play('grandmaidle', true);
         this.rain.anims.play('raindrop', true);
 
         if(!isStop){
@@ -297,20 +290,41 @@ class Funeral extends Phaser.Scene{
 
     }
 
+    //typewriting texts
+    typewriteText(text) {
+        const length = text.length;
+        let i = 0;
+        this.time.addEvent({
+            callback: () => {
+                this.typing.text += text[i];
+                ++i;
+            },
+            repeat: length - 1,
+            delay: 0
+        });
+    }
+
+    typewriteTextWrapped(text) {
+	    const lines = this.typing.getWrappedText(text)
+	    const wrappedText = lines.join('\n')
+
+	    this.typewriteText(wrappedText)
+    }
+
     //dialogue with cousin4
     cousin4talk() {
         this.cousin4dialogue = ["cousin4:  Hello! This is a demonstration", "cousin4:  of the dialogue mechanism", "cousin4:  Go right side and found the stone", "cousin4:  and you will know what to do"];
         this.back.setActive(true).setVisible(true);
-        this.dialogue.setActive(true).setVisible(true);
+        this.typing.setActive(true).setVisible(true);
         this.space.setActive(true).setVisible(true);
-        this.dialogue.text = this.cousin4dialogue[this.dialogorder];
         if(Phaser.Input.Keyboard.JustDown(keyS)) {
             this.sound.play('button');
+            this.dialogue.text = this.typewriteTextWrapped(this.cousin4dialogue[this.dialogorder]);
+            this.typing.text = '';
             this.dialogorder += 1;
-            this.dialogue.text = this.cousin4dialogue[this.dialogorder];
             if(this.dialogorder > this.cousin4dialogue.length) {
                 this.back.setVisible(false);
-                this.dialogue.setVisible(false);
+                this.typing.setVisible(false);
                 this.space.setVisible(false);
                 this.dialogorder = 0;
                 isTalkingCousin4 = false;

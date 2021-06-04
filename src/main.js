@@ -8,7 +8,7 @@ let config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 200 },
-            debug: false
+            debug: true
         }
     }
 }
@@ -17,9 +17,9 @@ let game = new Phaser.Game(config);
 
 //globalized text font
 let scoreConfig = {
-    fontFamily: 'system-ui',
+    fontFamily: 'Pixel',
     fontSize: '21px',
-    backgroundColor: '#2f4673',
+    //backgroundColor: '#2f4673',
     color: '#6b97bb',
     align: 'right',
     fixedWidth: 0
@@ -35,7 +35,7 @@ let isLeft, isRight, isJump, isStop = false;
 let isRunningLeft, isRunningRight = false;
 
 //talking status
-let isTalkingCousin3, isTalkingCousin4 = false;
+let isTalkingCousin3, isTalkingCousin4, isTalkingGrandparents, isTalkingFather = false;
 
 
 let map;

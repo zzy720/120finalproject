@@ -46,7 +46,7 @@ class Puzzle2 extends Phaser.Scene {
         this.spike1.setScale(1.2);
         this.spike2 = this.spikegroup.create(300, 663, 'spikes');
         this.spike2.setScale(1.2);
-        this.spike3 = this.spikegroup.create(545, 520, 'spikes');
+        this.spike3 = this.spikegroup.create(481, 520, 'spikes');
         this.spike3.angle = 180;
         this.spike3.setScale(1.1);
         this.spike4 = this.spikegroup.create(300, 985, 'spikes');
@@ -59,28 +59,49 @@ class Puzzle2 extends Phaser.Scene {
         this.spike8 = this.spikegroup.create(460, 278, 'spikes');
         this.spike8.setScale(1.4);
 
-        this.floordoor1 = this.floordoor.create(576, 871, 'floor_door');
-        this.floordoor2 = this.floordoor.create(128, 295, 'floor_door');
+        this.floordoor1 = this.floordoor.create(511, 880, 'floor_door');
+        this.floordoor2 = this.floordoor.create(128, 304, 'floor_door');
 
-        this.button1 = this.physics.add.staticSprite(761, 985, 'button-up');
+        this.button1 = this.physics.add.staticSprite(695, 985, 'button-up');
         this.button1.body.setSize(32,7);
+        this.button1_sub = this.physics.add.staticSprite(695, 980, 'button-up');
+        this.button1_sub.alpha = 0;
+        this.button1_sub.body.setSize(15, 3);
+        this.physics.add.collider(this.button1, this.button1_sub);
 
-        this.box1 = this.physics.add.sprite(825, 870, 'box');
+        this.box1 = this.physics.add.sprite(771, 870, 'box');
         this.physics.add.collider(layer, this.box1);
+        this.physics.add.overlap(this.button1_sub, this.box1, () => {
+            this.button1.setTexture('button-down');
+            this.floordoor1.setTexture('floor_door_open');
+            this.floordoor1.setActive(false);
+            this.floordoor1.body.enable = false;
+        });
 
+        this.physics.add.collider(this.box1, this.button1);
 
-        this.button2 = this.physics.add.staticSprite(850, 792, 'button-up');
-        this.button2.body.setSize(32, 7);
+        this.button2 = this.physics.add.staticSprite(800, 792, 'button-up');
+        this.button2.body.setSize(32, 7); 
+        this.button2_sub = this.physics.add.staticSprite(800, 787, 'button-up');
+        this.button2_sub.alpha = 0;
+        this.button2_sub.body.setSize(15, 3);
+        this.physics.add.collider(this.button2, this.button2sub);
 
-        this.box2 = this.physics.add.sprite(845, 320, 'box');
-        //this.box2.setScale(0.8);
+        this.box2 = this.physics.add.sprite(820, 320, 'box');
         this.physics.add.collider(layer, this.box2);
+        this.physics.add.overlap(this.button2_sub, this.box2, () => {
+            this.button2.setTexture('button-down');
+            this.floordoor2.setTexture('floor_door_open');
+            this.floordoor2.setActive(false);
+            this.floordoor2.body.enable = false;
+        });
+        this.physics.add.collider(this.box2, this.button2);
 
 
-        this.controller1 = this.physics.add.staticSprite(634, 658, 'controller1-left');
+        this.controller1 = this.physics.add.staticSprite(570, 658, 'controller1-left');
 
         //create main character
-        this.main = new Tony(this, 60, 1500, 'walk_right', 0, 125).setOrigin(0, 0);
+        this.main = new Tony(this, 60, 950, 'walk_right', 0, 125).setOrigin(0, 0);
         this.physics.add.existing(this.main);
         this.main.setScale(0.6);
         this.main.body.setSize(48, 75); 
@@ -97,10 +118,18 @@ class Puzzle2 extends Phaser.Scene {
         });
 
         this.physics.add.collider(this.box1, this.main);
-        this.physics.add.collider(this.box1, this.button1);
         this.physics.add.collider(this.box2, this.main);
-        this.physics.add.collider(this.box2, this.button2);
+        this.physics.add.collider(this.main, this.spikegroup, () => {
+            this.reset();
+        });
 
+        this.physics.add.collider(this.main, this.floordoor);
+        this.physics.add.collider(this.button1, this.main, () => {
+            isJump = false;
+        });
+        this.physics.add.collider(this.button2, this.main, () => {
+            isJump = false;
+        });
 
         //camera setting
         this.cameras.main.setBounds(0, 0, 1024, 1024);
@@ -164,5 +193,11 @@ class Puzzle2 extends Phaser.Scene {
             }
         }
         
+    }
+
+    reset() {
+        this.main.setPosition(60, 950);
+        this.box1.setPosition(771, 870);
+        this.box2.setPosition(820, 320);
     }
 }

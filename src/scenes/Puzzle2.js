@@ -64,19 +64,37 @@ class Puzzle2 extends Phaser.Scene {
 
         this.button1 = this.physics.add.staticSprite(695, 985, 'button-up');
         this.button1.body.setSize(32,7);
+        this.button1_sub = this.physics.add.staticSprite(695, 980, 'button-up');
+        this.button1_sub.alpha = 0;
+        this.button1_sub.body.setSize(15, 3);
+        this.physics.add.collider(this.button1, this.button1_sub);
 
         this.box1 = this.physics.add.sprite(771, 870, 'box');
         this.physics.add.collider(layer, this.box1);
+        this.physics.add.overlap(this.button1_sub, this.box1, () => {
+            this.button1.setTexture('button-down');
+            this.floordoor1.setTexture('floor_door_open');
+            this.floordoor1.setActive(false);
+            this.floordoor1.body.enable = false;
+        });
 
         this.physics.add.collider(this.box1, this.button1);
 
         this.button2 = this.physics.add.staticSprite(800, 792, 'button-up');
-        this.button2.body.setSize(32, 7);
+        this.button2.body.setSize(32, 7); 
+        this.button2_sub = this.physics.add.staticSprite(800, 787, 'button-up');
+        this.button2_sub.alpha = 0;
+        this.button2_sub.body.setSize(15, 3);
+        this.physics.add.collider(this.button2, this.button2sub);
 
         this.box2 = this.physics.add.sprite(820, 320, 'box');
-        //this.box2.setScale(0.8);
         this.physics.add.collider(layer, this.box2);
-
+        this.physics.add.overlap(this.button2_sub, this.box2, () => {
+            this.button2.setTexture('button-down');
+            this.floordoor2.setTexture('floor_door_open');
+            this.floordoor2.setActive(false);
+            this.floordoor2.body.enable = false;
+        });
         this.physics.add.collider(this.box2, this.button2);
 
 
@@ -106,7 +124,12 @@ class Puzzle2 extends Phaser.Scene {
         });
 
         this.physics.add.collider(this.main, this.floordoor);
-
+        this.physics.add.collider(this.button1, this.main, () => {
+            isJump = false;
+        });
+        this.physics.add.collider(this.button2, this.main, () => {
+            isJump = false;
+        });
 
         //camera setting
         this.cameras.main.setBounds(0, 0, 1024, 1024);

@@ -45,7 +45,10 @@ class Funeral extends Phaser.Scene{
             frameWidth: 80,
             frameHeight: 88
         });
-
+        this.load.spritesheet('shadow', './assets/Mom_Ghost.png', {
+            frameWidth: 32,
+            frameHeight: 73
+        });
         
         this.load.image('interact', './assets/interact.png');
         this.load.image('rip', './assets/Grave.png');
@@ -54,7 +57,20 @@ class Funeral extends Phaser.Scene{
         this.load.spritesheet('rain', './assets/Rain_Animation.png', {
             frameWidth: 1500,
             frameHeight: 480
-        })
+        });
+        this.load.spritesheet('glow', './assets/Shadow_Glow.png', {
+            frameWidth: 640,
+            frameHeight: 480
+        });
+        this.load.spritesheet('3dots', './assets/3dots.png', {
+            frameWidth: 25,
+            frameHeight: 18
+        });
+        this.load.spritesheet('question', './assets/question.png', {
+            frameWidth: 25,
+            frameHeight: 18
+        });
+
     }
 
     create() {
@@ -113,12 +129,33 @@ class Funeral extends Phaser.Scene{
             frames: this.anims.generateFrameNumbers('grandparents'),
             frameRate: 1
         });
+        this.anims.create({
+            key: 'shadowidle',
+            frames: this.anims.generateFrameNumbers('shadow'),
+            frameRate: 2
+        })
+
 
         this.anims.create({
             key: 'raindrop',
             frames: this.anims.generateFrameNumbers('rain'),
             frameRate: 20
         });
+        this.anims.create({
+            key: 'shine',
+            frames: this.anims.generateFrameNumbers('glow'),
+            frameRate: 8
+        });
+        this.anims.create({
+            key: 'uhh',
+            frames: this.anims.generateFrameNumbers('3dots'),
+            frameRate: 7
+        })
+        this.anims.create({
+            key: 'what',
+            frames: this.anims.generateFrameNumbers('question'),
+            frameRate: 5
+        })
 
 
 
@@ -161,11 +198,17 @@ class Funeral extends Phaser.Scene{
         this.interactCousin3.setScale(1.3);
 
         //cousin4 NPC
-        this.cousin4 = this.physics.add.sprite(340, 450, 'cousin4');
+        this.cousin4 = this.physics.add.sprite(400, 450, 'cousin4');
         this.cousin4.body.setCollideWorldBounds(true);
         this.isCousin4 = false;
         this.interactCousin4 = this.add.sprite(0, 0, 'interact'); // ...
         this.interactCousin4.setScale(1.3);
+
+        //shadow
+        this.shadow = this.physics.add.sprite(1480, 450, 'shadow');
+        this.shadow.body.setCollideWorldBounds(true);
+        this.shadow.setVisible(false);
+        this.shadow.setScale(1.1);
 
         //main character
         this.main = new Tony(this, 100, 400, "walk_right", 0, 300).setOrigin(0, 0);
@@ -187,13 +230,32 @@ class Funeral extends Phaser.Scene{
         //set interaction
         this.physics.add.collider(this.main, this.tomb);
         this.physics.add.overlap(this.main, this.tomb_sub, () => {
-            this.inter = true; //show instruction
             if(Phaser.Input.Keyboard.JustDown(keyE)){ //if player input
+                this.inter = true;
                 if(this.hastalked) { //if talked to cousin4
                     this.sound.play('button');
-                    this.scene.start('puzzle1Scene');
+                    let question = this.add.sprite(this.main.x + 55, this.main.y, 'question'); //?
+                    question.anims.play('what');
+                    question.on('animationcomplete', () => {
+                        question.destroy();
+                    });
+                    this.time.delayedCall(2000, () => {
+                        let shine = this.add.sprite(860, 0, 'glow').setOrigin(0, 0);
+                        shine.anims.play('shine');
+                        shine.on('animationcomplete', () => {
+                            this.scene.start('puzzle1Scene');
+                        });
+                    });
+                    
                 } else {
-                    this.warn = this.add.text(300, 330, "why are you ignoring the cousin4?", scoreConfig);
+                    this.inter = true;
+                    let interact = this.add.sprite(this.main.x + 55, this.main.y, 'interact'); //...
+                    interact.anims.play('uhh');
+                    interact.on('animationcomplete', () => {
+                        interact.destroy();
+                        this.inter = false;
+                    });
+
                 }
             } 
         });
@@ -235,7 +297,6 @@ class Funeral extends Phaser.Scene{
         isJump = true;
         this.main.update();
 
-        
         this.back.setPosition(this.main.x, this.main.y + 30);
         this.dialogue.setPosition(this.back.x - 270, this.back.y - 40);
         this.typing.setPosition(this.back.x - 270, this.back.y - 40);
@@ -245,6 +306,7 @@ class Funeral extends Phaser.Scene{
         this.cousin4.anims.play('cousin4idle', true);
         this.grandparents.anims.play('grandmaidle', true);
         this.rain.anims.play('raindrop', true);
+        this.shadow.anims.play('shadowidle', true);
 
         if(!isStop){
             if(isRight) {
@@ -264,16 +326,16 @@ class Funeral extends Phaser.Scene{
 
         
 
-        //if overlap then show interaction text
-        /*
+        //if interact with tomb then player cannot move
+        
         if(this.inter) {
-            this.interact.alpha = 1;
+            this.main.body.setVelocity(0);
+            this.input.keyboard.enabled = false;
+            this.isStop = true;
         } else {
-            this.interact.alpha = 0;
+            this.input.keyboard.enabled = true;
         }
-        */
-
-        this.inter = false; 
+        
 
         
         //if overlap then show interaction text
@@ -302,9 +364,10 @@ class Funeral extends Phaser.Scene{
             this.interactGrandparents.setPosition(this.grandparents.x + 45, this.grandparents.y - 45)
         } else {
             this.interactGrandparents.setVisible(false);
-            this.isGrandparents = false; 
+            
         }
 
+        this.isGrandparents = false; 
         
         
         
@@ -362,6 +425,7 @@ class Funeral extends Phaser.Scene{
             }
         }
         this.hastalked = true;
+        this.shadow.setVisible(true);
     }
 
     //dialogue with cousin3

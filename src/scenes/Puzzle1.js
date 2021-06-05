@@ -8,8 +8,8 @@ class Puzzle1 extends Phaser.Scene{
         this.load.tilemapTiledJSON('map', 'assets/tilemaps/tilemap1.json')
         this.load.image('tiles', 'assets/tilemaps/tilesets.png');  
         this.load.image('tiles2', 'assets/tilemaps/tilesets2.png'); 
-        this.load.image('floor_door', './assets/images/door.png');
-        this.load.image('floor_door_open', './assets/images/door-0.png');
+        this.load.image('floor_door', './assets/images/door-l.png');
+        this.load.image('floor_door_open', './assets/images/door-l0.png');
         this.load.image('spikes', './assets/images/obstacle.png');
         this.load.image('controller1-left', './assets/images/controler1.png');
         this.load.image('controller1-right', './assets/images/controler1-1.png');
@@ -33,10 +33,14 @@ class Puzzle1 extends Phaser.Scene{
             frameWidth: 48,
             frameHeight: 80
         });
-        this.load.image('red_door', './assets/images/door1.png');
-        this.load.image('purple_door', './assets/images/door2.png');
+        this.load.image('red_door-close', './assets/images/door1.png');
+        this.load.image('red_door-open', './assets/images/door1-0.png');
+        this.load.image('purple_door-close', './assets/images/door2.png');
+        this.load.image('purple_door-open', './assets/images/door2-0.png');
         this.load.image('key', './assets/images/key.png');
-        this.load.image('exit', './assets/images/bigdoor.png');
+        this.load.image('exit', './assets/images/newdoor2.png');
+        this.load.image('exit-unlock', './assets/images/newdoor.png');
+        this.load.image('exit-open', './assets/images/newdoor1.png');
         this.load.image('black', './assets/black.png');
         
     }
@@ -130,7 +134,13 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.world.setBounds(0, 0, 1000, 1000);
 
         //spawn the puzzle exit
-        this.exit = this.physics.add.staticSprite(63, 897, 'exit');
+        this.exit = this.physics.add.staticSprite(63, 894, 'exit');
+
+        //spawn doors 
+        this.red_door_1 = this.red_door_group.create(425, 224, 'red_door-close');
+        this.red_door_2 = this.red_door_group.create(136, 768, 'red_door-close');
+        this.purple_door_1 = this.purple_door_group.create(425, 352, 'purple_door-close');
+        this.purple_door_2 = this.purple_door_group.create(137, 896, "purple_door-close");
 
         //main character
         this.main = new Tony(this, 60, 35, 'walk_right', 0, 120).setOrigin(0, 0);
@@ -143,6 +153,10 @@ class Puzzle1 extends Phaser.Scene{
         //puzzle passing condition
         this.physics.add.overlap(this.main, this.exit, () => {
             if(this.isPass) {
+                this.exit.setTexture('exit-unlock');
+                this.clock = this.time.delayedCall(4000, () => {
+                    this.exit.setTexture('exit-open');
+                }, null, this);
                 this.scene.start('puzzle2Scene');
             } else {
                 console.log("key?");
@@ -153,7 +167,7 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.world.on('worldbounds', () => {
             isJump = false;
         });
-
+    
         this.physics.add.collider(this.main, layer, ()=> {
             isJump = false;
         });
@@ -207,7 +221,7 @@ class Puzzle1 extends Phaser.Scene{
 
         this.button3 = this.buttongroup.create(85, 795, 'button-up');
         this.button3.setSize(32, 7);
-        this.button3_sub = this.buttongroup.create(85, 7, 'button-up');
+        this.button3_sub = this.buttongroup.create(85, 790, 'button-up');
         this.button3_sub.alpha = 0;
         this.button3_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button3, this.button3_sub);
@@ -246,12 +260,6 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.add.collider(this.purple_door_group, layer);
         this.physics.add.collider(this.purple_door_group, this.main);
 
-        //spawn doors 
-        this.red_door_1 = this.red_door_group.create(425, 224, 'red_door');
-        this.red_door_2 = this.red_door_group.create(136, 768, 'red_door');
-        this.purple_door_1 = this.purple_door_group.create(425, 352, 'purple_door');
-        this.purple_door_2 = this.purple_door_group.create(137, 896, "purple_door");
-
         //controller colliders
         this.physics.add.collider(this.controllergroup, layer);
         this.physics.add.collider(this.controllergroup, this.main);
@@ -265,14 +273,14 @@ class Puzzle1 extends Phaser.Scene{
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
                 if(this.control_red % 2 == 0){
                     this.controller1.setTexture('controller1-left');
-                    this.red_door_1.setActive(true).setVisible(true);
-                    this.red_door_2.setActive(false).setVisible(false);
+                    this.red_door_1.setTexture('red_door-close');
+                    this.red_door_2.setTexture('red_door-open');
                     this.red_door_1.body.enable = true;
                     this.red_door_2.body.enable = false;
                 } else {
                     this.controller1.setTexture('controller1-right');
-                    this.red_door_1.setActive(false).setVisible(false);
-                    this.red_door_2.setActive(true).setVisible(true);
+                    this.red_door_2.setTexture('red_door-close');
+                    this.red_door_1.setTexture('red_door-open');
                     this.red_door_2.body.enable = true;
                     this.red_door_1.body.enable = false;
                 }
@@ -288,14 +296,14 @@ class Puzzle1 extends Phaser.Scene{
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
                 if(this.control_purple % 2 == 0){
                     this.controller2.setTexture('controller2-left');
-                    this.purple_door_1.setActive(true).setVisible(true);
-                    this.purple_door_2.setActive(false).setVisible(false);
+                    this.purple_door_1.setTexture('purple_door-close');
+                    this.purple_door_2.setTexture('purple_door-open');
                     this.purple_door_1.body.enable = true;
                     this.purple_door_2.body.enable = false;
                 } else {
                     this.controller2.setTexture('controller2-right');
-                    this.purple_door_1.setActive(false).setVisible(false);
-                    this.purple_door_2.setActive(true).setVisible(true);
+                    this.purple_door_2.setTexture('purple_door-close');
+                    this.purple_door_1.setTexture('purple_door-open');
                     this.purple_door_2.body.enable = true;
                     this.purple_door_1.body.enable = false;
                 }
@@ -329,18 +337,6 @@ class Puzzle1 extends Phaser.Scene{
         mask.setInvertAlpha();
 
         pic.setMask(mask);
-
-        /*
-        this.spotlight = this.make.sprite({
-            x: 100,
-            y: 100,
-            key: 'mask',
-            add: false
-        });
-        
-        //layer.mask = new Phaser.Display.Masks.BitmapMask(this, this.spotlight);
-        this.mask = new Phaser.Display.Masks.BitmapMask(this, this.spotlight);
-        */
     }
 
     update() {

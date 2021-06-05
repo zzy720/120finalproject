@@ -11,9 +11,18 @@ class Puzzle2 extends Phaser.Scene {
         this.load.image('pillar', './assets/tilemaps/heaven.png');
         this.load.image('sky', './assets/tilemaps/sky.png');
         this.load.image('box', './assets/images/box.png');
+        this.load.image('controller3-left', './assets/images/controler3.png');
+        this.load.image('controller3-right', './assets/images/controler3-1.png');
+        this.load.image('yellow_floor-close', './assets/images/door4.png');
+        this.load.image('yellow_floor-open', './assets/images/door4-0.png');
+        this.load.image('yellow_door-close', './assets/images/door3.png');
+        this.load.image('yellow_door-open', './assets/images/door3-0.png');
     }
 
     create() {
+        //controller count initialize
+        this.control_yellow = 1;
+
         this.map = this.add.tilemap('map2'); 
         let tiles3 = this.map.addTilesetImage('tileset3new','tiles3');  // set tileset name
         let sky = this.map.addTilesetImage('sky','sky');  // set tileset name
@@ -61,6 +70,8 @@ class Puzzle2 extends Phaser.Scene {
 
         this.floordoor1 = this.floordoor.create(511, 880, 'floor_door');
         this.floordoor2 = this.floordoor.create(128, 304, 'floor_door');
+        this.floordoor3 = this.floordoor.create(704, 689, 'yellow_floor-close');
+        this.yellowdoor = this.physics.add.staticSprite(970, 255, 'yellow_door-open');
 
         this.button1 = this.physics.add.staticSprite(695, 985, 'button-up');
         this.button1.body.setSize(32,7);
@@ -98,7 +109,11 @@ class Puzzle2 extends Phaser.Scene {
         this.physics.add.collider(this.box2, this.button2);
 
 
-        this.controller1 = this.physics.add.staticSprite(570, 658, 'controller1-left');
+        this.controller3 = this.physics.add.staticSprite(570, 658, 'controller3-left');
+        this.controller3_sub = this.physics.add.staticSprite(570, 658, 'controller3-left');
+        this.controller3_sub.body.setSize(64,32);
+        this.controller3_sub.alpha = 0;
+        
 
         //create main character
         this.main = new Tony(this, 60, 950, 'walk_right', 0, 125).setOrigin(0, 0);
@@ -131,6 +146,26 @@ class Puzzle2 extends Phaser.Scene {
             isJump = false;
         });
 
+        this.physics.add.collider(this.controller3, this.main);
+
+        this.physics.add.overlap(this.controller3_sub, this.main, () => {
+            if(Phaser.Input.Keyboard.JustDown(keyE)) {
+                if(this.control_yellow % 2 == 0){
+                    this.controller3.setTexture('controller3-left');
+                    this.yellowdoor.setTexture('yellow_door-open');
+                    this.floordoor3.setTexture('yellow_floor-close');
+                    this.yellowdoor.body.enable = false;
+                    this.floordoor3.body.enable = true;
+                } else {
+                    this.controller3.setTexture('controller3-right');
+                    this.yellowdoor.setTexture('yellow_door-close');
+                    this.floordoor3.setTexture('yellow_floor-open');
+                    this.yellowdoor.body.enable = true;
+                    this.floordoor3.body.enable = false;
+                }
+                this.control_yellow += 1;
+            }
+        })
         //camera setting
         this.cameras.main.setBounds(0, 0, 1024, 1024);
         this.cameras.main.startFollow(this.main, false, 1, 1, 0, 155);

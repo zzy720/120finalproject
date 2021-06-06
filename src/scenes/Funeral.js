@@ -26,12 +26,12 @@ class Funeral extends Phaser.Scene{
 
         //characters
         this.load.spritesheet('cousin1', './assets/Cousin_1.png', {
-            frameWidth: 27,
-            frameHeight: 68
+            frameWidth: 68,
+            frameHeight: 82
         });
         this.load.spritesheet('cousin2', './assets/Cousin_2.png', {
-            frameWidth: 27,
-            frameHeight: 68
+            frameWidth: 68,
+            frameHeight: 78
         });
         this.load.spritesheet('cousin3', './assets/Cousin_3.png', {
             frameWidth: 24,
@@ -55,13 +55,12 @@ class Funeral extends Phaser.Scene{
         });
         this.load.spritesheet('uncle', './assets/uncle.png', {
             frameWidth: 80,
-            frameHeight: 103
+            frameHeight: 102
         });
 
         this.load.image('interact', './assets/interact.png');
         this.load.image('rip', './assets/Grave.png');
         this.load.image('dialog', './assets/images/dialog.png');
-        this.load.image('FuneralBack', './assets/Funeral.png');
 
         //UI
         this.load.image('keyA', './assets/images/keya.png');
@@ -95,7 +94,8 @@ class Funeral extends Phaser.Scene{
     create() {
 
         isRight = true; //initially facing right
-        this.hastalked = false; //talked to cousin4 or not
+        this.hastalked = false; //talked to dad or not
+        this.hastalkedGrand = false; //talked to grandparents or not
         this.dialogorder = 0; //dialogue counter
 
         //create animation
@@ -229,16 +229,14 @@ class Funeral extends Phaser.Scene{
         this.interactDad.setScale(1.3);
 
         //uncleNPC
-        this.uncle = this.physics.add.sprite(1080, 450, 'uncle');
+        this.uncle = this.physics.add.sprite(1076, 450, 'uncle');
         this.uncle.body.setCollideWorldBounds(true);
-        this.uncle.body.setSize(35, 85);
         this.isUncle = false;
-        this.interactUncle = this.add.sprite(0, 0, 'interact'); //...
-        this.interactUncle.setScale(1.3);
 
         //cousin1 NPC
-        this.cousin1 = this.physics.add.sprite(380, 450, 'cousin1');
+        this.cousin1 = this.physics.add.sprite(389, 450, 'cousin1');
         this.cousin1.body.setCollideWorldBounds(true);
+        this.cousin1.body.setSize(30, 80);
         this.isCousin1 = false;
         this.interactCousin1 = this.add.sprite(0, 0, 'interact'); //...
         this.interactCousin1.setScale(1.3);
@@ -262,7 +260,6 @@ class Funeral extends Phaser.Scene{
         this.cousin4.body.setCollideWorldBounds(true);
         this.isCousin4 = false;
         this.interactCousin4 = this.add.sprite(0, 0, 'interact'); // ...
-        this.interactCousin4.flipX = true;
         this.interactCousin4.setScale(1.3);
 
         //shadow
@@ -364,7 +361,7 @@ class Funeral extends Phaser.Scene{
         })
 
         //set interaction with cousin4
-        this.physics.add.overlap(this.main, this.cousin4, () => {
+        this.physics.add.overlap(this.main, this.uncle, () => {
             this.isCousin4 = true; //show interaction UI
             if(Phaser.Input.Keyboard.JustDown(keyE)) { //if input then start talk
                 this.sound.play('button');
@@ -387,6 +384,15 @@ class Funeral extends Phaser.Scene{
             if(Phaser.Input.Keyboard.JustDown(keyE)) { //if input then start talk
                 this.sound.play('button');
                 isTalkingGrandparents = true;
+            }
+        });
+
+        //set interaction with dad
+        this.physics.add.overlap(this.main, this.dad, () => {
+            this.isDad = true; //show interaction UI
+            if(Phaser.Input.Keyboard.JustDown(keyE)) { //if input then start talk
+                this.sound.play('button');
+                isTalkingDad = true;
             }
         });
 
@@ -490,7 +496,7 @@ class Funeral extends Phaser.Scene{
 
         if(this.isCousin4) {
             this.interactCousin4.setVisible(true);
-            this.interactCousin4.setPosition(this.cousin4.x - 22, this.cousin4.y - 30)
+            this.interactCousin4.setPosition(this.uncle.x + 43, this.uncle.y - 45);
         } else {
             this.interactCousin4.setVisible(false);
         }
@@ -509,13 +515,22 @@ class Funeral extends Phaser.Scene{
 
         if(this.isGrandparents) {
             this.interactGrandparents.setVisible(true);
-            this.interactGrandparents.setPosition(this.grandparents.x + 45, this.grandparents.y - 45)
+            this.interactGrandparents.setPosition(this.grandparents.x + 39, this.grandparents.y - 37)
         } else {
             this.interactGrandparents.setVisible(false);
             
         }
 
         this.isGrandparents = false; 
+
+        if(this.isDad) {
+            this.interactDad.setVisible(true);
+            this.interactDad.setPosition(this.dad.x + 26, this.dad.y - 37)
+        } else {
+            this.interactDad.setVisible(false);
+        }
+
+        this.isDad = false;
         
         
         
@@ -539,6 +554,17 @@ class Funeral extends Phaser.Scene{
         if(isTalkingGrandparents) {
             this.main.body.setVelocity(0);
             this.grandparentstalk();
+        } 
+        if(isTalkingDad) {
+            this.main.body.setVelocity(0);
+            if(this.hastalkedGrand) {
+                this.Dadtalk(fatherdialogueafter);
+                this.hastalked = true;
+                this.shadow.setVisible(true);
+            } else {
+                this.Dadtalk(fatherdialoguebefore);
+            }
+
         } 
 
     }
@@ -584,8 +610,6 @@ class Funeral extends Phaser.Scene{
                 isTalkingCousin4 = false;
             }
         }
-        this.hastalked = true;
-        this.shadow.setVisible(true);
     }
 
     //dialogue with cousin3
@@ -666,7 +690,26 @@ class Funeral extends Phaser.Scene{
                 isTalkingGrandparents = false;
             }
         }
-        this.hastalked = true;
-        this.shadow.setVisible(true);
+        this.hastalkedGrand = true;
+    }
+
+    //dialogue with dad
+    Dadtalk(content) {
+        this.back.setActive(true).setVisible(true);
+        this.dialogue.setActive(true).setVisible(true);
+        this.space.setActive(true).setVisible(true);
+        this.dialogue.text = content[this.dialogorder];
+        if(Phaser.Input.Keyboard.JustDown(keyS)) {
+            this.sound.play('button');
+                this.dialogorder += 1;
+                this.dialogue.text = content[this.dialogorder];
+            if(this.dialogorder > content.length) {
+                this.back.setVisible(false);
+                this.dialogue.setVisible(false);
+                this.space.setVisible(false);
+                this.dialogorder = 0;
+                isTalkingDad = false;
+            }
+        }
     }
 }

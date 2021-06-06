@@ -36,7 +36,7 @@ let isRunningLeft, isRunningRight = false;
 
 //talking status
 let isTalkingCousin1, isTalkingCousin2, isTalkingCousin3, isTalkingCousin4, 
-    isTalkingGrandparents, isTalkingFather = false;
+    isTalkingGrandparents, isTalkingDad = false;
 
 
 let map;
@@ -48,22 +48,30 @@ let cousin1dialogue = ["Bianca:  I feel sorry for you Tony,",
                        "Bianca:  everything is gonna be fine.", 
                        "Bianca:  Time will carry away the pain."];
 
-let cousin2dialogue = ["Vicky:  *Cries* Aunt Helena treated me so well,",
+let cousin2dialogue = ["Vicky:  Aunt Helena treated me so well,",
                        "Vicky:  but...",
-                       "VIcky:  *Cries...*"];
+                       "VIcky:  I'm sorry..."];
 
 let cousin3dialogue = ["Jenny:  Don't cry brother!"];
 
-let cousin4dialogue = ["Timmy:  Papa! It's raining!"];
+let cousin4dialogue = ["Timmy:  Papa! It's raining!",
+                       "Uncle:  Timmy! Be quiet! Behave yourself!",
+                       "Uncle:  I'm sorry Tony, Timmy is still too young,",
+                       "Uncle:  He can't quite understand the situation right now.",
+                       "Tony:  It's alright uncle."];
 
-let grandparentsdialogue = ["Grandma: She's so adorable...",
-                            "Grandpa: Her life shouldn't end like this...",
-                            "Grandma: My honey...",
-                            "Grandpa: ...",
-                            "Grandma: You should go talk to your dad."];
+let grandparentsdialogue = ["Grandma:  She was so adorable...",
+                            "Grandpa:  Her life shouldn't end like this...",
+                            "Grandma:  My honey...",
+                            "Grandpa:  ...",
+                            "Grandma:  You should go talk to your dad,",
+                            "Grandma:  he must be so suffering..."];
 
-let fatherdialogue = ["Dad: I love her so much,",
-                      "Dad: "];
+let fatherdialoguebefore = ["Dad:  Helena..."];
 
-let uncledialogue = [];
+let fatherdialogueafter = ["Dad:  I loved her so much,",
+                           "Dad:  She will always be with us...", 
+                           "Dad:  It's time to go home,", 
+                           "Dad:  but before that...",
+                           "Dad:  would you want to say goodbye to your mom?"];
 

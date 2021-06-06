@@ -20,6 +20,9 @@ class Puzzle2 extends Phaser.Scene {
     }
 
     create() {
+
+        isRight = true; //intially facing right
+        
         //controller count initialize
         this.control_yellow = 1;
 
@@ -116,7 +119,7 @@ class Puzzle2 extends Phaser.Scene {
         
 
         //create main character
-        this.main = new Tony(this, 60, 945, 'idle_right', 0, 125).setOrigin(0, 0);
+        this.main = new Tony(this, 60, 890, 'idle_right', 0, 125).setOrigin(0, 0);
         this.physics.add.existing(this.main);
         this.main.setScale(0.7);
         this.main.body.setSize(43, 85); 

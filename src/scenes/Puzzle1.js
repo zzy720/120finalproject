@@ -30,8 +30,8 @@ class Puzzle1 extends Phaser.Scene{
             frameHeight: 96
         });
         this.load.spritesheet('jump_right', './assets/R_Jump.png', {
-            frameWidth: 48,
-            frameHeight: 80
+            frameWidth: 64,
+            frameHeight: 96
         });
         this.load.image('red_door-close', './assets/images/door1.png');
         this.load.image('red_door-open', './assets/images/door1-0.png');
@@ -70,7 +70,7 @@ class Puzzle1 extends Phaser.Scene{
         this.anims.create({
             key:'leftjump',
             frames: this.anims.generateFrameNumbers('jump_left'),
-            frameRate: 4
+            frameRate: 6
         }); 
         this.anims.create({
             key: 'rightjump',
@@ -152,8 +152,8 @@ class Puzzle1 extends Phaser.Scene{
         //main character
         this.main = new Tony(this, 60, 35, 'idle_right', 0, 120).setOrigin(0, 0);
         this.physics.add.existing(this.main);
-        this.main.setScale(0.6);
-        this.main.body.setSize(48, 75); 
+        this.main.setScale(0.7);
+        this.main.body.setSize(43, 85); 
         this.main.body.setCollideWorldBounds(true);
         this.main.body.onWorldBounds = true;
 

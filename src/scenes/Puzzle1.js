@@ -7,7 +7,7 @@ class Puzzle1 extends Phaser.Scene{
         //load images and spritesheets
         this.load.tilemapTiledJSON('map', 'assets/tilemaps/tilemap1.json')
         this.load.image('tiles', 'assets/tilemaps/tilesets.png');  
-        this.load.image('tiles2', 'assets/tilemaps/tilesets2.png'); 
+        this.load.image('tiles2', 'assets/tilemaps/jungle01.png'); 
         this.load.image('floor_door', './assets/images/door-l.png');
         this.load.image('floor_door_open', './assets/images/door-l0.png');
         this.load.image('spikes', './assets/images/obstacle.png');
@@ -18,16 +18,16 @@ class Puzzle1 extends Phaser.Scene{
         this.load.image('button-up', './assets/images/botton1.png');
         this.load.image('button-down', './assets/images/button.png');
         this.load.spritesheet('run_left', './assets/L_Run.png', {
-            frameWidth: 48,
-            frameHeight: 80
+            frameWidth: 64,
+            frameHeight: 96
         });
         this.load.spritesheet('run_right', './assets/R_Run.png', {
-            frameWidth: 48,
-            frameHeight: 80
+            frameWidth: 64,
+            frameHeight: 96
         });
         this.load.spritesheet('jump_left', './assets/L_Jump.png', {
-            frameWidth: 48,
-            frameHeight: 80
+            frameWidth: 64,
+            frameHeight: 96
         });
         this.load.spritesheet('jump_right', './assets/R_Jump.png', {
             frameWidth: 48,
@@ -60,17 +60,17 @@ class Puzzle1 extends Phaser.Scene{
         this.anims.create({
             key:'leftrun',
             frames: this.anims.generateFrameNumbers('run_left'),
-            frameRate: 10
+            frameRate: 7
         });
         this.anims.create({
             key:'rightrun',
             frames: this.anims.generateFrameNumbers('run_right'),
-            frameRate: 10
+            frameRate: 7
         });
         this.anims.create({
             key:'leftjump',
             frames: this.anims.generateFrameNumbers('jump_left'),
-            frameRate: 6
+            frameRate: 4
         }); 
         this.anims.create({
             key: 'rightjump',
@@ -81,7 +81,7 @@ class Puzzle1 extends Phaser.Scene{
         //create the map
         this.map = this.add.tilemap('map'); 
         let tiles = this.map.addTilesetImage('tilesets','tiles');  // set tileset name
-        let tiles2 = this.map.addTilesetImage('tilesets2','tiles2');
+        let tiles2 = this.map.addTilesetImage('jungle01','tiles2');
         let backgroundlayer = this.map.createLayer('background',[tiles2]);
                 
 
@@ -143,7 +143,7 @@ class Puzzle1 extends Phaser.Scene{
         this.purple_door_2 = this.purple_door_group.create(137, 896, "purple_door-close");
 
         //main character
-        this.main = new Tony(this, 60, 35, 'walk_right', 0, 120).setOrigin(0, 0);
+        this.main = new Tony(this, 60, 35, 'idle_right', 0, 120).setOrigin(0, 0);
         this.physics.add.existing(this.main);
         this.main.setScale(0.6);
         this.main.body.setSize(48, 75); 
@@ -153,11 +153,15 @@ class Puzzle1 extends Phaser.Scene{
         //puzzle passing condition
         this.physics.add.overlap(this.main, this.exit, () => {
             if(this.isPass) {
+                this.input.keyboard.enabled = false;
                 this.exit.setTexture('exit-unlock');
                 this.clock = this.time.delayedCall(4000, () => {
                     this.exit.setTexture('exit-open');
                 }, null, this);
-                this.scene.start('puzzle2Scene');
+                this.clock = this.time.delayedCall(10000, () => {
+                    this.input.keyboard.enabled = true;
+                    this.scene.start('puzzle2Scene');
+                }, null, this);
             } else {
                 console.log("key?");
             }
@@ -167,10 +171,11 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.world.on('worldbounds', () => {
             isJump = false;
         });
-    
+
+
         this.physics.add.collider(this.main, layer, ()=> {
             isJump = false;
-        });
+        }); 
 
         //spawn key
         this.key = this.physics.add.staticSprite(310, 365, 'key');

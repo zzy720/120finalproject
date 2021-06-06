@@ -6,7 +6,7 @@ class Puzzle1 extends Phaser.Scene{
     preload() {
         //load images and spritesheets
         this.load.tilemapTiledJSON('map', 'assets/tilemaps/tilemap1.json')
-        this.load.image('tiles', 'assets/tilemaps/tilesets.png');  
+        this.load.image('tiles', 'assets/tilemaps/tilesets1.png');  
         this.load.image('tiles2', 'assets/tilemaps/jungle01.png'); 
         this.load.image('floor_door', './assets/images/door-l.png');
         this.load.image('floor_door_open', './assets/images/door-l0.png');
@@ -80,14 +80,21 @@ class Puzzle1 extends Phaser.Scene{
 
         //create the map
         this.map = this.add.tilemap('map'); 
-        let tiles = this.map.addTilesetImage('tilesets','tiles');  // set tileset name
+        let tiles = this.map.addTilesetImage('tilesets1','tiles');  // set tileset name
         let tiles2 = this.map.addTilesetImage('jungle01','tiles2');
         let backgroundlayer = this.map.createLayer('background',[tiles2]);
                 
 
         //interaction guide
         this.interact = this.add.text(220, 70, "try to step on it", scoreConfig);
-        this.instruction = this.add.text( 600, 350, "Press E to interact", scoreConfig);
+        this.instruction = this.add.sprite(600, 355, 'keyE').setOrigin(0, 0);
+        this.instruction.setScale(0.7);
+        this.getkey = this.add.sprite(300, 312, 'keyE').setOrigin(0, 0);
+        this.getkey.setScale(0.7);
+        this.space = this.add.sprite(120, 100, 'keySPACE');
+        this.space.setScale(0.7);
+        this.arrowup = this.add.sprite(153, 99, 'arrowUP');
+        this.arrowup.setScale(0.4);
 
         //player input definition
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);

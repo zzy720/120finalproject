@@ -8,12 +8,12 @@ class Funeral extends Phaser.Scene{
 
         //Main Character Animation
         this.load.spritesheet('walk_left', './assets/L_Walk.png', {
-            frameWidth: 48,
-            frameHeight: 80
+            frameWidth: 64,
+            frameHeight: 96
         });
         this.load.spritesheet('walk_right', './assets/R_Walk.png', {
-            frameWidth: 48,
-            frameHeight: 80
+            frameWidth: 64,
+            frameHeight: 96
         });
         this.load.spritesheet('idle_right', './assets/R_Idle.png', {
             frameWidth: 64,
@@ -27,11 +27,11 @@ class Funeral extends Phaser.Scene{
         //characters
         this.load.spritesheet('cousin1', './assets/Cousin_1.png', {
             frameWidth: 27,
-            frameHeight: 80
+            frameHeight: 68
         });
         this.load.spritesheet('cousin2', './assets/Cousin_2.png', {
             frameWidth: 27,
-            frameHeight: 80
+            frameHeight: 68
         });
         this.load.spritesheet('cousin3', './assets/Cousin_3.png', {
             frameWidth: 24,
@@ -93,23 +93,22 @@ class Funeral extends Phaser.Scene{
     }
 
     create() {
+
         isRight = true; //initially facing right
         this.hastalked = false; //talked to cousin4 or not
         this.dialogorder = 0; //dialogue counter
-
-        this.cousin4dialogue = ["cousin4:  Hello! This is a demonstration", "cousin4:  of the dialogue mechanism", "cousin4:  Go right side and found the stone", "cousin4:  and you will know what to do"];
 
         //create animation
         //main character animation
         this.anims.create({
             key:'leftwalk',
             frames: this.anims.generateFrameNumbers('walk_left'),
-            frameRate: 8
+            frameRate: 4
         }); 
         this.anims.create({
             key: 'rightwalk',
             frames: this.anims.generateFrameNumbers('walk_right'),
-            frameRate: 8
+            frameRate: 4
         });
         this.anims.create({
             key:'leftidle',
@@ -151,7 +150,7 @@ class Funeral extends Phaser.Scene{
         this.anims.create({
             key: 'dadidle',
             frames: this.anims.generateFrameNumbers('dad'),
-            frameRate: 3
+            frameRate: 1
         });
         this.anims.create({
             key: 'uncleidle',
@@ -187,8 +186,6 @@ class Funeral extends Phaser.Scene{
         })
 
 
-
-
         //player input definition
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
@@ -199,6 +196,7 @@ class Funeral extends Phaser.Scene{
         //set world boundary
         this.physics.world.setBounds(0, 0, 1500, game.config.height - 30);
 
+        //background layer
         this.background = this.add.sprite(0, 0, 'FuneralBack').setOrigin(0, 0);
 
         
@@ -216,11 +214,41 @@ class Funeral extends Phaser.Scene{
         this.rain = this.add.sprite(0, 0, 'rain').setOrigin(0, 0); //rain animation layer
 
         //grandparents NPC
-        this.grandparents = this.physics.add.sprite(620, 450, 'grandparents');
+        this.grandparents = this.physics.add.sprite(820, 450, 'grandparents');
         this.grandparents.body.setCollideWorldBounds(true);
         this.isGrandparents = false;
         this.interactGrandparents = this.add.sprite(0, 0, 'interact'); // ...
         this.interactGrandparents.setScale(1.3);
+
+        //dad NPC
+        this.dad = this.physics.add.sprite(475, 450, 'dad');
+        this.dad.body.setCollideWorldBounds(true);
+        this.dad.body.setSize(30, 85);
+        this.isDad = false;
+        this.interactDad = this.add.sprite(0, 0, 'interact'); //...
+        this.interactDad.setScale(1.3);
+
+        //uncleNPC
+        this.uncle = this.physics.add.sprite(1080, 450, 'uncle');
+        this.uncle.body.setCollideWorldBounds(true);
+        this.uncle.body.setSize(35, 85);
+        this.isUncle = false;
+        this.interactUncle = this.add.sprite(0, 0, 'interact'); //...
+        this.interactUncle.setScale(1.3);
+
+        //cousin1 NPC
+        this.cousin1 = this.physics.add.sprite(380, 450, 'cousin1');
+        this.cousin1.body.setCollideWorldBounds(true);
+        this.isCousin1 = false;
+        this.interactCousin1 = this.add.sprite(0, 0, 'interact'); //...
+        this.interactCousin1.setScale(1.3);
+
+        //cousin2 NPC
+        this.cousin2 = this.physics.add.sprite(630, 450, 'cousin2');
+        this.cousin2.body.setCollideWorldBounds(true);
+        this.isCousin2 = false;
+        this.interactCousin2 = this.add.sprite(0, 0, 'interact'); //...
+        this.interactCousin2.setScale(1.3);
 
         //cousin3 NPC
         this.cousin3 = this.physics.add.sprite(500, 450, 'cousin3');
@@ -230,10 +258,11 @@ class Funeral extends Phaser.Scene{
         this.interactCousin3.setScale(1.3);
 
         //cousin4 NPC
-        this.cousin4 = this.physics.add.sprite(400, 450, 'cousin4');
+        this.cousin4 = this.physics.add.sprite(1050, 450, 'cousin4');
         this.cousin4.body.setCollideWorldBounds(true);
         this.isCousin4 = false;
         this.interactCousin4 = this.add.sprite(0, 0, 'interact'); // ...
+        this.interactCousin4.flipX = true;
         this.interactCousin4.setScale(1.3);
 
         //shadow
@@ -261,8 +290,10 @@ class Funeral extends Phaser.Scene{
         this.rightarrow.setScale(0.5);
 
         //UI for player interaction
-        this.pressE = this.add.sprite(this.cousin4.x - 16, this.cousin4.y - 121, 'keyE').setOrigin(0, 0);
+        this.pressE = this.add.sprite(this.cousin1.x - 16, this.cousin1.y - 121, 'keyE').setOrigin(0, 0);
         this.pressE.setVisible(false);
+
+        this.rain2 = this.add.sprite(0, 0, 'rain').setOrigin(0, 0); //rain animation layer
 
 
         //dialogue box config
@@ -277,10 +308,11 @@ class Funeral extends Phaser.Scene{
         this.space.setActive(false).setVisible(false);
 
         //set interaction
+
+        //interaction with tomb
         this.physics.add.collider(this.main, this.tomb);
 
         this.physics.add.overlap(this.main, this.tomb_sub, () => {
-            console.log('ei');
             this.isTomb = true;
             if(Phaser.Input.Keyboard.JustDown(keyE)){ //if player input
                 console.log('true');
@@ -312,29 +344,47 @@ class Funeral extends Phaser.Scene{
             } 
         });
 
-        //set interaction
-        this.physics.add.overlap(this.main, this.cousin4, () => {
-            this.isCousin4 = true;
-            if(Phaser.Input.Keyboard.JustDown(keyE)) {
+        //set interaction with cousin1
+        this.physics.add.overlap(this.main, this.cousin1, () => {
+            this.isCousin1 = true; //show interaction UI
+            if(Phaser.Input.Keyboard.JustDown(keyE)) { //if input then start talk
                 this.sound.play('button');
                 this.pressE.destroy();
+                isTalkingCousin1 = true;
+            }
+        })
+
+        //set interaction with cousin2
+        this.physics.add.overlap(this.main, this.cousin2, () => {
+            this.isCousin2 = true; //show interaction UI
+            if(Phaser.Input.Keyboard.JustDown(keyE)) { //if input then start talk
+                this.sound.play('button');
+                isTalkingCousin2 = true;
+            }
+        })
+
+        //set interaction with cousin4
+        this.physics.add.overlap(this.main, this.cousin4, () => {
+            this.isCousin4 = true; //show interaction UI
+            if(Phaser.Input.Keyboard.JustDown(keyE)) { //if input then start talk
+                this.sound.play('button');
                 isTalkingCousin4 = true;
             }
         });
 
-        //set interaction
+        //set interaction with cousin3
         this.physics.add.overlap(this.main, this.cousin3, () => {
-            this.isCousin3 = true;
-            if(Phaser.Input.Keyboard.JustDown(keyE)) {
+            this.isCousin3 = true; //show interaction UI
+            if(Phaser.Input.Keyboard.JustDown(keyE)) { //if input then start talk
                 this.sound.play('button');
                 isTalkingCousin3 = true;
             }
         });
         
-        //set interaction
+        //set interaction with grandparents
         this.physics.add.overlap(this.main, this.grandparents, () => {
-            this.isGrandparents = true;
-            if(Phaser.Input.Keyboard.JustDown(keyE)) {
+            this.isGrandparents = true; //show interaction UI
+            if(Phaser.Input.Keyboard.JustDown(keyE)) { //if input then start talk
                 this.sound.play('button');
                 isTalkingGrandparents = true;
             }
@@ -350,7 +400,7 @@ class Funeral extends Phaser.Scene{
         isJump = true;
         this.main.update();
 
-        this.back.setPosition(this.main.x, this.main.y + 30);
+        this.back.setPosition(this.main.x, this.main.y + 40);
         this.dialogue.setPosition(this.back.x - 270, this.back.y - 40);
         this.typing.setPosition(this.back.x - 270, this.back.y - 40);
         this.space.setPosition(this.typing.x, this.typing.y + 75);
@@ -359,7 +409,12 @@ class Funeral extends Phaser.Scene{
         this.cousin4.anims.play('cousin4idle', true);
         this.grandparents.anims.play('grandmaidle', true);
         this.rain.anims.play('raindrop', true);
+        this.rain2.anims.play('raindrop', true);
         this.shadow.anims.play('shadowidle', true);
+        this.dad.anims.play('dadidle', true);
+        this.uncle.anims.play('uncleidle', true);
+        this.cousin1.anims.play('cousin1idle', true);
+        this.cousin2.anims.play('cousin2idle', true);
 
         this.walkleft.setPosition(this.main.x - 30, this.main.y - 30);
         this.leftarrow.setPosition(this.walkleft.x + 5, this.walkleft.y - 20);
@@ -395,10 +450,11 @@ class Funeral extends Phaser.Scene{
 
         //if interact with tomb then player cannot move
         if(this.inter) {
+            this.input.keyboard.enabled = false;
             this.main.body.setVelocity(0);
             this.isStop = true;
         } else {
-            //this.input.keyboard.enabled = true;
+            this.input.keyboard.enabled = true;
         }
         
         if(this.isTomb){
@@ -410,15 +466,33 @@ class Funeral extends Phaser.Scene{
 
         this.isTomb = false;
         
-        //if overlap then show interaction text
+        //if overlap then show interaction UI
+
+        if(this.isCousin1) {
+            this.interactCousin1.setVisible(true);
+            this.pressE.setVisible(true);
+            this.interactCousin1.setPosition(this.cousin1.x + 26, this.cousin1.y - 37)
+        } else {
+            this.interactCousin1.setVisible(false);
+            this.pressE.setVisible(false);
+        }
+
+        this.isCousin1 = false;
+
+        if(this.isCousin2) {
+            this.interactCousin2.setVisible(true);
+            this.interactCousin2.setPosition(this.cousin2.x + 26, this.cousin2.y - 37)
+        } else {
+            this.interactCousin2.setVisible(false);
+        }
+
+        this.isCousin2 = false;
 
         if(this.isCousin4) {
             this.interactCousin4.setVisible(true);
-            this.pressE.setVisible(true);
-            this.interactCousin4.setPosition(this.cousin4.x + 20, this.cousin4.y - 35)
+            this.interactCousin4.setPosition(this.cousin4.x - 22, this.cousin4.y - 30)
         } else {
             this.interactCousin4.setVisible(false);
-            this.pressE.setVisible(false);
         }
 
         this.isCousin4 = false; 
@@ -454,6 +528,18 @@ class Funeral extends Phaser.Scene{
             this.main.body.setVelocity(0);
             this.cousin3talk();
         } 
+        if(isTalkingCousin2) {
+            this.main.body.setVelocity(0);
+            this.cousin2talk();
+        } 
+        if(isTalkingCousin1) {
+            this.main.body.setVelocity(0);
+            this.cousin1talk();
+        } 
+        if(isTalkingGrandparents) {
+            this.main.body.setVelocity(0);
+            this.grandparentstalk();
+        } 
 
     }
 
@@ -483,16 +569,16 @@ class Funeral extends Phaser.Scene{
     //dialogue with cousin4
     cousin4talk() {
         this.back.setActive(true).setVisible(true);
-        this.typing.setActive(true).setVisible(true);
+        this.dialogue.setActive(true).setVisible(true);
         this.space.setActive(true).setVisible(true);
+        this.dialogue.text = cousin4dialogue[this.dialogorder];
         if(Phaser.Input.Keyboard.JustDown(keyS)) {
             this.sound.play('button');
-                this.dialogue.text = this.typewriteTextWrapped(this.cousin4dialogue[this.dialogorder]);
-                this.typing.text = '';  
                 this.dialogorder += 1;
-            if(this.dialogorder > this.cousin4dialogue.length) {
+                this.dialogue.text = cousin4dialogue[this.dialogorder];
+            if(this.dialogorder > cousin4dialogue.length) {
                 this.back.setVisible(false);
-                this.typing.setVisible(false);
+                this.dialogue.setVisible(false);
                 this.space.setVisible(false);
                 this.dialogorder = 0;
                 isTalkingCousin4 = false;
@@ -504,16 +590,15 @@ class Funeral extends Phaser.Scene{
 
     //dialogue with cousin3
     cousin3talk() {
-        this.cousin3dialogue = ["cousin3:  Hello! This is a demonstration", "cousin4:  of the dialogue mechanism", "cousin4:  Go right side and found the stone", "cousin4:  and you will know what to do"];
         this.back.setActive(true).setVisible(true);
         this.dialogue.setActive(true).setVisible(true);
         this.space.setActive(true).setVisible(true);
-        this.dialogue.text = this.cousin3dialogue[this.dialogorder];
+        this.dialogue.text = cousin3dialogue[this.dialogorder];
         if(Phaser.Input.Keyboard.JustDown(keyS)) {
             this.sound.play('button');
             this.dialogorder += 1;
-            this.dialogue.text = this.cousin3dialogue[this.dialogorder];
-            if(this.dialogorder > this.cousin3dialogue.length) {
+            this.dialogue.text = cousin3dialogue[this.dialogorder];
+            if(this.dialogorder > cousin3dialogue.length) {
                 this.back.setVisible(false);
                 this.dialogue.setVisible(false);
                 this.space.setVisible(false);
@@ -521,5 +606,67 @@ class Funeral extends Phaser.Scene{
                 isTalkingCousin3 = false;
             }
         }
+    }
+
+    //dialogue with cousin2
+    cousin2talk() {
+        this.back.setActive(true).setVisible(true);
+        this.dialogue.setActive(true).setVisible(true);
+        this.space.setActive(true).setVisible(true);
+        this.dialogue.text = cousin2dialogue[this.dialogorder];
+        if(Phaser.Input.Keyboard.JustDown(keyS)) {
+            this.sound.play('button');
+            this.dialogorder += 1;
+            this.dialogue.text = cousin2dialogue[this.dialogorder];
+            if(this.dialogorder > cousin2dialogue.length) {
+                this.back.setVisible(false);
+                this.dialogue.setVisible(false);
+                this.space.setVisible(false);
+                this.dialogorder = 0;
+                isTalkingCousin2 = false;
+            }
+        }
+    }
+
+    //dialogue with cousin1
+    cousin1talk() {
+        this.back.setActive(true).setVisible(true);
+        this.dialogue.setActive(true).setVisible(true);
+        this.space.setActive(true).setVisible(true);
+        this.dialogue.text = cousin1dialogue[this.dialogorder];
+        if(Phaser.Input.Keyboard.JustDown(keyS)) {
+            this.sound.play('button');
+            this.dialogorder += 1;
+            this.dialogue.text = cousin1dialogue[this.dialogorder];
+            if(this.dialogorder > cousin1dialogue.length) {
+                this.back.setVisible(false);
+                this.dialogue.setVisible(false);
+                this.space.setVisible(false);
+                this.dialogorder = 0;
+                isTalkingCousin1 = false;
+            }
+        }
+    }
+
+    //dialogue with grandparents
+    grandparentstalk() {
+        this.back.setActive(true).setVisible(true);
+        this.dialogue.setActive(true).setVisible(true);
+        this.space.setActive(true).setVisible(true);
+        this.dialogue.text = grandparentsdialogue[this.dialogorder];
+        if(Phaser.Input.Keyboard.JustDown(keyS)) {
+            this.sound.play('button');
+                this.dialogorder += 1;
+                this.dialogue.text = grandparentsdialogue[this.dialogorder];
+            if(this.dialogorder > grandparentsdialogue.length) {
+                this.back.setVisible(false);
+                this.dialogue.setVisible(false);
+                this.space.setVisible(false);
+                this.dialogorder = 0;
+                isTalkingGrandparents = false;
+            }
+        }
+        this.hastalked = true;
+        this.shadow.setVisible(true);
     }
 }

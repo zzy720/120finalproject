@@ -35,10 +35,35 @@ let isLeft, isRight, isJump, isStop = false;
 let isRunningLeft, isRunningRight = false;
 
 //talking status
-let isTalkingCousin3, isTalkingCousin4, isTalkingGrandparents, isTalkingFather = false;
+let isTalkingCousin1, isTalkingCousin2, isTalkingCousin3, isTalkingCousin4, 
+    isTalkingGrandparents, isTalkingFather = false;
 
 
 let map;
 let layer,bglayer;
 let tiles;
 let controls;
+
+let cousin1dialogue = ["Bianca:  I feel sorry for you Tony,", 
+                       "Bianca:  everything is gonna be fine.", 
+                       "Bianca:  Time will carry away the pain."];
+
+let cousin2dialogue = ["Vicky:  *Cries* Aunt Helena treated me so well,",
+                       "Vicky:  but...",
+                       "VIcky:  *Cries...*"];
+
+let cousin3dialogue = ["Jenny:  Don't cry brother!"];
+
+let cousin4dialogue = ["Timmy:  Papa! It's raining!"];
+
+let grandparentsdialogue = ["Grandma: She's so adorable...",
+                            "Grandpa: Her life shouldn't end like this...",
+                            "Grandma: My honey...",
+                            "Grandpa: ...",
+                            "Grandma: You should go talk to your dad."];
+
+let fatherdialogue = ["Dad: I love her so much,",
+                      "Dad: "];
+
+let uncledialogue = [];
+

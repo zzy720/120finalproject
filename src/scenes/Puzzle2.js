@@ -45,7 +45,7 @@ class Puzzle2 extends Phaser.Scene {
             loop: true
         });
         this.lastplot = this.sound.add('finalplotbgm', {
-            volume: 0.1,
+            volume: 0.2,
             loop: false
         })
         this.stepbutton = this.sound.add('floordooropen', { //sound played when stepon button and open trapdoor
@@ -107,6 +107,7 @@ class Puzzle2 extends Phaser.Scene {
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyF1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F1);
 
 
         //create spikes
@@ -341,6 +342,10 @@ class Puzzle2 extends Phaser.Scene {
         this.main.update();
         this.box1.setVelocityX(0);
         this.box2.setVelocityX(0);
+
+        if(Phaser.Input.Keyboard.JustDown(keyF1)) {
+            this.main.setPosition(300, 30);
+        }
         
         if(!this.isPlay) {
             this.input.keyboard.enabled = false;

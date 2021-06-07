@@ -204,7 +204,7 @@ class Funeral extends Phaser.Scene{
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        keyF1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F1);
 
         //set world boundary
         this.physics.world.setBounds(0, 0, 1500, game.config.height - 30);
@@ -434,9 +434,9 @@ class Funeral extends Phaser.Scene{
 
     update() {
 
-        if(Phaser.Input.Keyboard.JustDown(keyF)) {
-            this.isPass = true;
-            this.scene.start('exitScene');
+        if(Phaser.Input.Keyboard.JustDown(keyF1)) {
+            this.funeral_background.stop();
+            this.scene.start('puzzle1Scene');
         }
 
         isJump = true;

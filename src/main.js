@@ -1,3 +1,17 @@
+/*
+Game Name: The Funeral
+Group Members' Names: Noah Jiang, Zeyu Zhang, Bianca Hsieh
+
+ps: cheat code for grader
+    If you really can't beat the puzzles:
+    press F1 in the first scene to go to the puzzle
+    press F1 in the first puzzle to go to the second puzzle
+    press F1 in the second puzzle to go to the top - walk toward the shadow to trigger the final plot
+
+    but we do hope that you can beat all the levels since we have find numerous amount of playtesters,
+    and they all beated it.
+*/
+
 // game configuration
 let config = {
     type: Phaser.WEBGL,
@@ -55,7 +69,7 @@ let endConfig = {
 
 //reserve key inputs
 let keyA, keyD, keyE, keyS, keySPACE;
-let keyF; //cheat code
+let keyF1; //cheat code
 
 //moving status
 let isLeft, isRight, isJump, isStop = false;

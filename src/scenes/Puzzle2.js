@@ -111,7 +111,7 @@ class Puzzle2 extends Phaser.Scene {
 
         this.floordoor1 = this.floordoor.create(511, 880, 'floor_door');
         this.floordoor2 = this.floordoor.create(128, 304, 'floor_door');
-        this.floordoor3 = this.floordoor.create(704, 689, 'yellow_floor-close');
+        this.floordoor3 = this.floordoor.create(720, 689, 'yellow_floor-close');
         this.yellowdoor = this.physics.add.staticSprite(970, 255, 'yellow_door-open');
 
         this.button1 = this.physics.add.staticSprite(695, 985, 'button-up');
@@ -366,7 +366,7 @@ class Puzzle2 extends Phaser.Scene {
     }
 
     reset() {
-        this.main.setPosition(60, 950);
+        this.main.setPosition(60, 890);
         this.box1.setPosition(771, 870);
         this.box2.setPosition(820, 320);
     }

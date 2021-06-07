@@ -23,12 +23,54 @@ class Menu extends Phaser.Scene{
         })
         this.load.audio('funeral_background', './assets/120final_funeral.wav');
         this.load.audio('menu_background', './assets/120final_menu.wav');
+        this.load.audio('puzzle1bgm', './assets/120final_puzzle1.wav');
+        this.load.audio('puzzle2bgm', './assets/120final_puzzle2.wav');
+        this.load.audio('finalplotbgm', './assets/120final_finalplot.wav');
+
+        //add a loading screen 
+        //source from https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/
+        let progressBar = this.add.graphics();
+        let progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect(150, 210, 320, 50);
+
+        let width = this.cameras.main.width;
+        let height = this.cameras.main.height;
+        let loadingText = this.make.text({
+            x: width / 2,
+            y: height / 2 - 50,
+            text: 'Loading...',
+            style: {
+                font: '20px pixel',
+                fill: '#ffffff'
+            }
+        });
+        loadingText.setOrigin(0.5, 0.5);
+
+        this.load.on('progress', function (value) {
+            console.log(value);
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect(160, 220, 300 * value, 30);
+        });
+                    
+        this.load.on('fileprogress', function (file) {
+            console.log(file.src);
+        });
+        
+        this.load.on('complete', function () {
+            console.log('complete');
+            progressBar.destroy();
+            progressBox.destroy();
+            loadingText.destroy();
+        });
     }
 
     create() {
         
-        this.background = this.sound.add('menu_background', {
-            volume: 0.6
+        this.bgm = this.sound.add('menu_background', {
+            volume: 0.1,
+            loop: true
         });
         this.anims.create({
             key: 'groupidle',
@@ -48,7 +90,7 @@ class Menu extends Phaser.Scene{
 
 
         //play background musics
-        this.background.play();
+        this.bgm.play();
 
         //background layer
         this.background = this.add.sprite(0, 0, 'FuneralBack').setOrigin(0, 0);
@@ -102,8 +144,8 @@ class Menu extends Phaser.Scene{
         //this.continue.setPosition(this.title.x, this.title.y + 60);
         //go to game scene when press space
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            this.bgm.stop(); //stop background music
             this.sound.play('button'); //play sfx
-            this.background.stop(); //stop background music
             this.scene.start('funeralScene');
         }
 

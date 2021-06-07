@@ -62,7 +62,11 @@ class Puzzle1 extends Phaser.Scene{
     }
 
     create() {
-
+        //create sound & bgm
+        this.puzzle1bgm = this.sound.add('puzzle1bgm', {
+            volume: 0.03,
+            loop: true
+        });
         this.stepbutton = this.sound.add('floordooropen', { //sound played when stepon button and open trapdoor
             volume: 0.6
         });
@@ -194,9 +198,9 @@ class Puzzle1 extends Phaser.Scene{
 
         //spawn doors 
         this.red_door_1 = this.red_door_group.create(425, 224, 'red_door-close');
-        this.red_door_2 = this.red_door_group.create(136, 768, 'red_door-close');
+        this.red_door_2 = this.red_door_group.create(136, 768, 'red_door-open');
         this.purple_door_1 = this.purple_door_group.create(425, 352, 'purple_door-close');
-        this.purple_door_2 = this.purple_door_group.create(137, 896, "purple_door-close");
+        this.purple_door_2 = this.purple_door_group.create(137, 896, "purple_door-open");
 
         //main character
         this.main = new Tony(this, 60, 35, 'idle_right', 0, 120).setOrigin(0, 0);
@@ -459,6 +463,9 @@ class Puzzle1 extends Phaser.Scene{
             });
         });
 
+        //play bgm
+        this.puzzle1bgm.play();
+
         //create footstep
         this.input.keyboard.on('keydown-A', () => {
             this.running.play();
@@ -490,6 +497,7 @@ class Puzzle1 extends Phaser.Scene{
         
         if(Phaser.Input.Keyboard.JustDown(keyF)) {
             this.isPass = true;
+            this.puzzle1bgm.stop();
             this.scene.start('puzzle2Scene');
         }
 

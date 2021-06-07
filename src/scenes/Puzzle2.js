@@ -39,6 +39,15 @@ class Puzzle2 extends Phaser.Scene {
     }
 
     create() {
+        //create sound & bgm
+        this.puzzle2bgm = this.sound.add('puzzle2bgm', {
+            volume: 0.01,
+            loop: true
+        });
+        this.lastplot = this.sound.add('finalplotbgm', {
+            volume: 0.1,
+            loop: false
+        })
         this.stepbutton = this.sound.add('floordooropen', { //sound played when stepon button and open trapdoor
             volume: 0.6
         });
@@ -214,6 +223,9 @@ class Puzzle2 extends Phaser.Scene {
             this.isPlay = false;
             this.isEnd = true;
             this.cameras.main.zoomTo(2, 1000);
+            this.puzzle2bgm.stop();
+            this.running.stop();
+            this.lastplot.play();
             this.shadow_final.anims.play('trans', true);
             this.shadow_final.on('animationcomplete', () => {
                 this.shadow_final.destroy();
@@ -307,6 +319,8 @@ class Puzzle2 extends Phaser.Scene {
                 });
             });
         });
+
+        this.puzzle2bgm.play();
 
         //create footstep
         this.input.keyboard.on('keydown-A', () => {

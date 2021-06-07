@@ -95,13 +95,12 @@ class Funeral extends Phaser.Scene{
     }
 
     create() {
-
         this.walking = this.sound.add('walk', {
             volume: 0.4,
             loop: true
         });
         this.funeral_background = this.sound.add('funeral_background', {
-            volume: 0.1,
+            volume: 0.02,
             loop: true
         })
 

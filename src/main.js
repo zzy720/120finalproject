@@ -38,7 +38,7 @@ let creditConfig = {
     fontFamily: 'pixel',
     fontSize: '30px',
     //backgroundColor: '#2f4673',
-    color: '#625B57',
+    color: '#FFFFFF',
     align: 'left',
     fixedWidth: 0
 };
@@ -47,7 +47,7 @@ let endConfig = {
     fontFamily: 'pixel',
     fontSize: '72px',
     //backgroundColor: '#2f4673',
-    color: '#625B57',
+    color: '#FFFFFF',
     align: 'middle',
     fixedWidth: 0
 };

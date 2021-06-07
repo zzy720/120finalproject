@@ -38,11 +38,15 @@ class Puzzle1 extends Phaser.Scene{
         this.load.image('purple_door-close', './assets/images/door2.png');
         this.load.image('purple_door-open', './assets/images/door2-0.png');
         this.load.image('key', './assets/images/key.png');
+        this.load.image('findkey', './assets/key_bubble.png');
         this.load.image('exit', './assets/images/newdoor2.png');
         this.load.image('exit-unlock', './assets/images/newdoor.png');
         this.load.image('exit-open', './assets/images/newdoor1.png');
         this.load.image('black', './assets/black.png');
-        
+        this.load.spritesheet('shadowfly1', './assets/flypuzzle1.png', {
+            frameWidth: 640,
+            frameHeight: 480
+        })
     }
 
     create() {
@@ -77,6 +81,11 @@ class Puzzle1 extends Phaser.Scene{
             frames: this.anims.generateFrameNumbers('jump_right'),
             frameRate: 6
         });
+        this.anims.create({
+            key: 'flyshadow1',
+            frames: this.anims.generateFrameNumbers('shadowfly1'),
+            frameRate: 8
+        });
 
         //create the map
         this.map = this.add.tilemap('map'); 
@@ -84,7 +93,6 @@ class Puzzle1 extends Phaser.Scene{
         let tiles2 = this.map.addTilesetImage('jungle01','tiles2');
         let backgroundlayer = this.map.createLayer('background',[tiles2]);
                 
-
         //interaction guide
         this.interact = this.add.text(220, 70, "try to step on it", scoreConfig);
         this.instruction = this.add.sprite(600, 355, 'keyE').setOrigin(0, 0);
@@ -93,8 +101,10 @@ class Puzzle1 extends Phaser.Scene{
         this.getkey.setScale(0.7);
         this.space = this.add.sprite(120, 100, 'keySPACE');
         this.space.setScale(0.7);
+        this.space.setVisible(false);
         this.arrowup = this.add.sprite(153, 99, 'arrowUP');
         this.arrowup.setScale(0.4);
+        this.arrowup.setVisible(false);
 
         //player input definition
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -157,6 +167,14 @@ class Puzzle1 extends Phaser.Scene{
         this.main.body.setCollideWorldBounds(true);
         this.main.body.onWorldBounds = true;
 
+        //shadow
+        this.shadow = this.add.sprite(0, 0, 'shadowfly1').setOrigin(0, 0);
+        this.isPlay = false;
+
+        this.findkey = this.add.sprite(this.main.x + 56, this.main.y - 3, 'findkey');
+        this.findkey.setScale(1.3);
+        this.findkey.setVisible(false);
+
         //puzzle passing condition
         this.physics.add.overlap(this.main, this.exit, () => {
             if(this.isPass) {
@@ -171,8 +189,13 @@ class Puzzle1 extends Phaser.Scene{
                 }, null, this);
             } else {
                 console.log("key?");
+                this.findkey.setVisible(true);
+                this.time.delayedCall(5000, () => {
+                    this.findkey.setVisible(false);
+                })
             }
         });
+
 
         //jump mechanics
         this.physics.world.on('worldbounds', () => {
@@ -349,14 +372,46 @@ class Puzzle1 extends Phaser.Scene{
         mask.setInvertAlpha();
 
         pic.setMask(mask);
+
+
+        //play initial animation
+        this.cameras.main.zoomTo(2, 1000);
+        this.time.delayedCall(2000, () => {
+            let question = this.add.sprite(this.main.x + 55, this.main.y, 'question'); //?
+            question.anims.play('what');
+            question.on('animationcomplete', () => {
+                question.destroy();
+                this.shadow.anims.play('flyshadow1',true);
+                this.shadow.on('animationcomplete', () => {
+                    this.time.delayedCall(2000, () => {
+                        this.cameras.main.zoomTo(1, 1000);
+                        this.cameras.main.centerOn(0, 0);
+                        this.shadow.destroy();
+                        this.isPlay = true;
+                    });
+                });
+            });
+        });
     }
 
     update() {
 
+        if(!this.isPlay) {
+            this.input.keyboard.enabled = false;
+        }
+
+        if(this.isPlay) {
+            this.space.setVisible(true);
+            this.arrowup.setVisible(true);
+            this.input.keyboard.enabled = true;
+        }
+        
         if(Phaser.Input.Keyboard.JustDown(keyF)) {
             this.isPass = true;
             this.scene.start('puzzle2Scene');
         }
+
+        this.findkey.setPosition(this.main.x + 50, this.main.y - 1);
         
         this.main.update();
         this.shape.x = this.main.x;
@@ -392,6 +447,9 @@ class Puzzle1 extends Phaser.Scene{
                 });
             }
         }
+
+
+        
 
     }
     

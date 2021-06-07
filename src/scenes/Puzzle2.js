@@ -126,6 +126,10 @@ class Puzzle2 extends Phaser.Scene {
         this.main.body.setCollideWorldBounds(true);
         this.main.body.onWorldBounds = true;
 
+        //shadow
+        this.shadow = this.add.sprite(0, 0, 'shadowfly1').setOrigin(0, 0);
+        this.isPlay = false;
+
         //jump mechanics 
         this.physics.world.on('worldbounds', () => {
                 isJump = false;
@@ -173,6 +177,25 @@ class Puzzle2 extends Phaser.Scene {
         //camera setting
         this.cameras.main.setBounds(0, 0, 1024, 1024);
         this.cameras.main.startFollow(this.main, false, 1, 1, 0, 155);
+
+        //play initial animation
+        this.cameras.main.zoomTo(2, 1000);
+        this.time.delayedCall(2000, () => {
+            let question = this.add.sprite(this.main.x + 55, this.main.y, 'question'); //?
+            question.anims.play('what');
+            question.on('animationcomplete', () => {
+                question.destroy();
+                this.shadow.anims.play('flyshadow1',true);
+                this.shadow.on('animationcomplete', () => {
+                    this.time.delayedCall(2000, () => {
+                        this.cameras.main.zoomTo(1, 1000);
+                        this.cameras.main.centerOn(0, 0);
+                        this.shadow.destroy();
+                        this.isPlay = true;
+                    });
+                });
+            });
+        });
     }
 
     update() {
@@ -180,6 +203,14 @@ class Puzzle2 extends Phaser.Scene {
         this.box1.setVelocityX(0);
         this.box2.setVelocityX(0);
         
+        if(!this.isPlay) {
+            this.input.keyboard.enabled = false;
+        }
+
+        if(this.isPlay) {
+            this.input.keyboard.enabled = true;
+        }
+
         if(this.main.x < 0){
             this.main.setPosition(1000, this.main.y);
         }

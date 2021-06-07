@@ -17,10 +17,19 @@ let game = new Phaser.Game(config);
 
 //globalized text font
 let scoreConfig = {
-    fontFamily: 'Pixel',
+    fontFamily: 'pixel',
     fontSize: '21px',
     //backgroundColor: '#2f4673',
     color: '#6b97bb',
+    align: 'right',
+    fixedWidth: 0
+};
+
+let textConfig = {
+    fontFamily: 'pixel',
+    fontSize: '23px',
+    //backgroundColor: '#2f4673',
+    color: '#000000',
     align: 'right',
     fixedWidth: 0
 };

@@ -59,7 +59,6 @@ class Funeral extends Phaser.Scene{
         });
 
         this.load.image('interact', './assets/interact.png');
-        this.load.image('rip', './assets/Grave.png');
         this.load.image('dialog', './assets/images/dialog.png');
 
         //UI
@@ -72,10 +71,6 @@ class Funeral extends Phaser.Scene{
         this.load.image('arrowLEFT', './assets/images/arrow3.png');
 
         //scene animation
-        this.load.spritesheet('rain', './assets/Rain_Animation.png', {
-            frameWidth: 1500,
-            frameHeight: 480
-        });
         this.load.spritesheet('glow', './assets/Shadow_Glow.png', {
             frameWidth: 640,
             frameHeight: 480
@@ -85,6 +80,10 @@ class Funeral extends Phaser.Scene{
             frameHeight: 18
         });
         this.load.spritesheet('question', './assets/question.png', {
+            frameWidth: 25,
+            frameHeight: 18
+        });
+        this.load.spritesheet('shock', './assets/shock.png', {
             frameWidth: 25,
             frameHeight: 18
         });
@@ -163,12 +162,6 @@ class Funeral extends Phaser.Scene{
             frameRate: 3
         })
 
-
-        this.anims.create({
-            key: 'raindrop',
-            frames: this.anims.generateFrameNumbers('rain'),
-            frameRate: 20
-        });
         this.anims.create({
             key: 'shine',
             frames: this.anims.generateFrameNumbers('glow'),
@@ -177,12 +170,17 @@ class Funeral extends Phaser.Scene{
         this.anims.create({
             key: 'uhh',
             frames: this.anims.generateFrameNumbers('3dots'),
-            frameRate: 7
+            frameRate: 15
         })
         this.anims.create({
             key: 'what',
             frames: this.anims.generateFrameNumbers('question'),
-            frameRate: 5
+            frameRate: 9
+        })
+        this.anims.create({
+            key: 'wow',
+            frames: this.anims.generateFrameNumbers('shock'),
+            frameRate: 20
         })
 
 
@@ -296,8 +294,7 @@ class Funeral extends Phaser.Scene{
         //dialogue box config
         this.back = this.add.sprite(0, 319, 'dialog');
         this.dialogue = this.add.text(40, 360, 'null', scoreConfig).setOrigin(0, 0);
-        this.space = this.add.text(40, 440, "Press S to continue", scoreConfig);
-        this.typing = this.add.text(100, 100, '', scoreConfig);
+        this.space = this.add.text(40, 440, "Press S to continue", textConfig);
 
         //set to invisible when not activated
         this.back.setActive(false).setVisible(false);
@@ -322,12 +319,16 @@ class Funeral extends Phaser.Scene{
                         question.destroy();
                     });
                     this.time.delayedCall(2000, () => {
-                        let shine = this.add.sprite(860, 0, 'glow').setOrigin(0, 0);
-                        shine.anims.play('shine');
-                        shine.on('animationcomplete', () => {
-                            this.inter = false;
-                            this.scene.start('puzzle1Scene');
-                        });
+                        let shock = this.add.sprite(this.main.x + 55, this.main.y, 'shock'); //!
+                        shock.anims.play('wow');
+                        this.time.delayedCall(800, () => {
+                            let shine = this.add.sprite(860, 0, 'glow').setOrigin(0, 0);
+                            shine.anims.play('shine');
+                            shine.on('animationcomplete', () => {
+                                this.inter = false;
+                                this.scene.start('puzzle1Scene');
+                            });
+                        })
                     });
                 } else {
                     let interact = this.add.sprite(this.main.x + 55, this.main.y, 'interact'); //...
@@ -408,8 +409,7 @@ class Funeral extends Phaser.Scene{
 
         this.back.setPosition(this.main.x, this.main.y + 40);
         this.dialogue.setPosition(this.back.x - 270, this.back.y - 40);
-        this.typing.setPosition(this.back.x - 270, this.back.y - 40);
-        this.space.setPosition(this.typing.x, this.typing.y + 75);
+        this.space.setPosition(this.dialogue.x, this.dialogue.y + 75);
         
         this.cousin3.anims.play('cousin3idle', true);
         this.cousin4.anims.play('cousin4idle', true);

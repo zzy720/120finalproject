@@ -7,7 +7,7 @@ class Credit extends Phaser.Scene {
         //background layer
         this.background = this.add.sprite(0, 0, 'FuneralBack').setOrigin(0, 0);
         this.rain = this.add.sprite(0, 0, 'rain').setOrigin(0, 0); //rain animation layer
-        this.tomb = this.add.sprite(1400, 419, 'rip');
+        this.tomb = this.add.sprite(1394, 417, 'rip');
         this.rain2 = this.add.sprite(0, 0, 'rain').setOrigin(0, 0); //rain animation layer
         this.physics.world.setBounds(0, 0, 1500, game.config.height);
 

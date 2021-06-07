@@ -21,9 +21,15 @@ class Menu extends Phaser.Scene{
             frameWidth: 1103,
             frameHeight: 333,
         })
+        this.load.audio('funeral_background', './assets/120final_funeral.wav');
+        this.load.audio('menu_background', './assets/120final_menu.wav');
     }
 
     create() {
+        
+        this.background = this.sound.add('menu_background', {
+            volume: 0.6
+        });
         this.anims.create({
             key: 'groupidle',
             frames: this.anims.generateFrameNumbers('group'),
@@ -40,6 +46,9 @@ class Menu extends Phaser.Scene{
             frameRate: 4
         })
 
+
+        //play background musics
+        this.background.play();
 
         //background layer
         this.background = this.add.sprite(0, 0, 'FuneralBack').setOrigin(0, 0);
@@ -94,6 +103,7 @@ class Menu extends Phaser.Scene{
         //go to game scene when press space
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.sound.play('button'); //play sfx
+            this.background.stop(); //stop background music
             this.scene.start('funeralScene');
         }
 

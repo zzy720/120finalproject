@@ -33,9 +33,25 @@ class Puzzle2 extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 105
         });
+
+        //load audio
+        this.load.audio('running2', './assets/running2.wav');
     }
 
     create() {
+        this.stepbutton = this.sound.add('floordooropen', { //sound played when stepon button and open trapdoor
+            volume: 0.6
+        });
+        this.opendoor = this.sound.add('dooropen', { //sound played when turn lever and open door
+            volume: 0.3
+        })
+        this.running = this.sound.add('running2', { //running sound
+            volume: 0.3,
+            loop: true
+        })
+        this.hitspike = this.sound.add('hitspike', { //sound effect when hit spike
+            volume: 0.7
+        })
 
         isRight = true; //intially facing right
         this.dialogorder = 0;
@@ -123,7 +139,12 @@ class Puzzle2 extends Phaser.Scene {
 
         this.box1 = this.physics.add.sprite(771, 870, 'box');
         this.physics.add.collider(layer, this.box1);
+        let isplayed1 = false;
         this.physics.add.overlap(this.button1_sub, this.box1, () => {
+            if(!isplayed1) {
+                this.stepbutton.play();
+                isplayed1 = true;
+            }
             this.button1.setTexture('button-down');
             this.floordoor1.setTexture('floor_door_open');
             this.floordoor1.setActive(false);
@@ -141,7 +162,12 @@ class Puzzle2 extends Phaser.Scene {
 
         this.box2 = this.physics.add.sprite(820, 320, 'box');
         this.physics.add.collider(layer, this.box2);
+        let isplayed2 = false;
         this.physics.add.overlap(this.button2_sub, this.box2, () => {
+            if(!isplayed2) {
+                this.stepbutton.play();
+                isplayed2 = true;
+            }
             this.button2.setTexture('button-down');
             this.floordoor2.setTexture('floor_door_open');
             this.floordoor2.setActive(false);
@@ -166,7 +192,8 @@ class Puzzle2 extends Phaser.Scene {
         this.main.body.onWorldBounds = true;
 
         //shadow
-        this.shadow = this.add.sprite(16, 545, 'shadowfly2').setOrigin(0, 0); //initial shadow
+        this.shadow = this.add.sprite(47, 679, 'shadowfly2').setOrigin(0, 0); //initial shadow
+        this.shadow.setScale(0.7);
         this.isPlay = false;
         this.isEnd = false; //does the player reach the end?
 
@@ -221,7 +248,13 @@ class Puzzle2 extends Phaser.Scene {
 
         this.physics.add.collider(this.box1, this.main);
         this.physics.add.collider(this.box2, this.main);
+
+        this.isspikeSound = false;
         this.physics.add.collider(this.main, this.spikegroup, () => {
+            if(!this.isspikeSound) {
+                this.hitspike.play();
+                this.isspikeSound = true;
+            }
             this.reset();
         });
 
@@ -238,6 +271,7 @@ class Puzzle2 extends Phaser.Scene {
 
         this.physics.add.overlap(this.controller3_sub, this.main, () => {
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
+                this.opendoor.play();
                 if(this.control_yellow % 2 == 0){
                     this.controller3.setTexture('controller3-left');
                     this.yellowdoor.setTexture('yellow_door-open');
@@ -273,6 +307,20 @@ class Puzzle2 extends Phaser.Scene {
                 });
             });
         });
+
+        //create footstep
+        this.input.keyboard.on('keydown-A', () => {
+            this.running.play();
+        });
+        this.input.keyboard.on('keyup-A', () => {
+            this.running.stop();
+        });
+        this.input.keyboard.on('keydown-D', () => {
+            this.running.play();
+        });
+        this.input.keyboard.on('keyup-D', () => {
+            this.running.stop();
+        });
     }
 
     update() {
@@ -305,7 +353,7 @@ class Puzzle2 extends Phaser.Scene {
                     shine.flipY = true;
                     shine.anims.play('shine');
                     shine.on('animationcomplete', () => {
-                        this.scene.start('funeralScene');
+                        this.scene.start('exitScene');
                     });
                 });
             }
@@ -369,6 +417,7 @@ class Puzzle2 extends Phaser.Scene {
         this.main.setPosition(60, 890);
         this.box1.setPosition(771, 870);
         this.box2.setPosition(820, 320);
+        this.isspikeSound = false;
     }
 
     momtalk() {

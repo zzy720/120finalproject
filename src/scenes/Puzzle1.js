@@ -46,12 +46,19 @@ class Puzzle1 extends Phaser.Scene{
         this.load.spritesheet('shadowfly1', './assets/flypuzzle1.png', {
             frameWidth: 640,
             frameHeight: 480
-        })
+        });
+        this.load.spritesheet('pressSpace', './assets/images/keyspace-Sheet.png', {
+            frameWidth: 64,
+            frameHeight: 32
+        });
 
         //load audio
         this.load.audio('dooropen', './assets/door_open.wav');
         this.load.audio('floordooropen', './assets/floor_door_open.wav');
         this.load.audio('running1', './assets/running1.wav');
+        this.load.audio('hitspike', './assets/spike.wav');
+        this.load.audio('getkey', './assets/getkey.wav');
+        this.load.audio('bigdooropen', './assets/bigdoor_open.wav');
     }
 
     create() {
@@ -65,6 +72,15 @@ class Puzzle1 extends Phaser.Scene{
         this.running = this.sound.add('running1', { //running sound
             volume: 0.4,
             loop: true
+        })
+        this.hitspike = this.sound.add('hitspike', { //sound effect when hit spike
+            volume: 0.7
+        })
+        this.pickkey = this.sound.add('getkey', { //sound effect when get the key
+            volume: 0.6
+        })
+        this.bigdooropen = this.sound.add('bigdooropen', {
+            volume: 0.5
         })
 
         isRight = true; //intially facing right
@@ -102,6 +118,11 @@ class Puzzle1 extends Phaser.Scene{
             frames: this.anims.generateFrameNumbers('shadowfly1'),
             frameRate: 8
         });
+        this.anims.create({
+            key: 'pressspace',
+            frames: this.anims.generateFrameNumbers('pressSpace'),
+            frameRate: 10
+        });
 
         //create the map
         this.map = this.add.tilemap('map'); 
@@ -110,17 +131,19 @@ class Puzzle1 extends Phaser.Scene{
         let backgroundlayer = this.map.createLayer('background',[tiles2]);
                 
         //interaction guide
-        this.interact = this.add.text(220, 70, "try to step on it", scoreConfig);
+        //this.interact = this.add.text(220, 70, "try to step on it", scoreConfig);
         this.instruction = this.add.sprite(600, 355, 'keyE').setOrigin(0, 0);
         this.instruction.setScale(0.7);
         this.getkey = this.add.sprite(300, 312, 'keyE').setOrigin(0, 0);
         this.getkey.setScale(0.7);
-        this.space = this.add.sprite(120, 100, 'keySPACE');
+        this.space = this.add.sprite(350, 100, 'keySPACE');
         this.space.setScale(0.7);
         this.space.setVisible(false);
-        this.arrowup = this.add.sprite(153, 99, 'arrowUP');
+        this.arrowup = this.add.sprite(383, 99, 'arrowUP');
         this.arrowup.setScale(0.4);
         this.arrowup.setVisible(false);
+        this.pressspace = this.add.sprite(293, 590, 'pressSpace');
+        this.pressspace.setScale(0.5);
 
         //player input definition
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -156,8 +179,8 @@ class Puzzle1 extends Phaser.Scene{
         this.spike1 = this.spikegroup.create(42, 408, 'spikes');
         this.spike2 = this.spikegroup.create(420, 665, 'spikes');
         this.spike3 = this.spikegroup.create(540, 568, 'spikes');
-        this.spike4 = this.spikegroup.create(660, 37, 'spikes');
-        this.spike4.angle = 180;
+        //this.spike4 = this.spikegroup.create(660, 37, 'spikes');
+        //this.spike4.angle = 180;
         this.spike5 = this.spikegroup.create(700, 280, 'spikes');
         this.spike6 = this.spikegroup.create(540, 923, 'spikes');
 
@@ -192,17 +215,22 @@ class Puzzle1 extends Phaser.Scene{
         this.findkey.setVisible(false);
 
         //puzzle passing condition
+        let istouch = false;
         this.physics.add.overlap(this.main, this.exit, () => {
             if(this.isPass) {
-                this.input.keyboard.enabled = false;
-                this.exit.setTexture('exit-unlock');
-                this.clock = this.time.delayedCall(4000, () => {
-                    this.exit.setTexture('exit-open');
-                }, null, this);
-                this.clock = this.time.delayedCall(10000, () => {
-                    this.input.keyboard.enabled = true;
-                    this.scene.start('puzzle2Scene');
-                }, null, this);
+                if(!istouch) {
+                    istouch = true;
+                    this.input.keyboard.enabled = false;
+                    this.exit.setTexture('exit-unlock');
+                    this.clock = this.time.delayedCall(2000, () => {
+                        this.bigdooropen.play();
+                        this.exit.setTexture('exit-open');
+                    }, null, this);
+                    this.clock = this.time.delayedCall(5000, () => {
+                        this.input.keyboard.enabled = true;
+                        this.scene.start('puzzle2Scene');
+                    }, null, this);
+                }
             } else {
                 console.log("key?");
                 this.findkey.setVisible(true);
@@ -228,6 +256,7 @@ class Puzzle1 extends Phaser.Scene{
         this.key.setScale(0.6);
         this.physics.add.overlap(this.key, this.main, () => {
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
+                this.pickkey.play();
                 this.key.destroy();
                 this.isPass = true;
             }
@@ -255,7 +284,6 @@ class Puzzle1 extends Phaser.Scene{
             this.floordoor1.setTexture('floor_door_open');
             this.floordoor1.setActive(false);
             this.floordoor1.body.enable = false;
-            this.interact.alpha = 0;
         });
         
         this.button2 = this.buttongroup.create(310, 250, 'button-up');
@@ -316,7 +344,12 @@ class Puzzle1 extends Phaser.Scene{
 
         //spike colliders
         this.physics.add.collider(this.spikegroup, layer);
+        this.isspikeSound = false;
         this.physics.add.collider(this.spikegroup, this.main, () => {
+            if(!this.isspikeSound) {
+                this.hitspike.play();
+                this.isspikeSound = true;
+            }
             this.reset();
         })
 
@@ -427,8 +460,6 @@ class Puzzle1 extends Phaser.Scene{
         });
 
         //create footstep
-
-
         this.input.keyboard.on('keydown-A', () => {
             this.running.play();
         });
@@ -444,6 +475,8 @@ class Puzzle1 extends Phaser.Scene{
     }
 
     update() {
+
+        this.pressspace.anims.play('pressspace', true);
 
         if(!this.isPlay) {
             this.input.keyboard.enabled = false;
@@ -505,5 +538,6 @@ class Puzzle1 extends Phaser.Scene{
     reset() {
         this.main.x = 60;
         this.main.y = 35;
+        this.isspikeSound = false;
     }
 }

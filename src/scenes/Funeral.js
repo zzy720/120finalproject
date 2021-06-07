@@ -90,6 +90,7 @@ class Funeral extends Phaser.Scene{
 
         //audio
         this.load.audio('walk', './assets/walking.wav');
+        
 
     }
 
@@ -99,6 +100,12 @@ class Funeral extends Phaser.Scene{
             volume: 0.4,
             loop: true
         });
+        this.funeral_background = this.sound.add('funeral_background', {
+            volume: 0.1,
+            loop: true
+        })
+
+        this.funeral_background.play();
 
         isRight = true; //initially facing right
         this.hastalked = false; //talked to dad or not
@@ -320,8 +327,8 @@ class Funeral extends Phaser.Scene{
             if(Phaser.Input.Keyboard.JustDown(keyE)){ //if player input
                 console.log('true');
                 this.inter = true;
+                this.sound.play('button');
                 if(this.hastalked) { //if talked to cousin4
-                    this.sound.play('button');
                     let question = this.add.sprite(this.main.x + 55, this.main.y, 'question'); //?
                     question.anims.play('what');
                     question.on('animationcomplete', () => {
@@ -335,6 +342,7 @@ class Funeral extends Phaser.Scene{
                             shine.anims.play('shine');
                             shine.on('animationcomplete', () => {
                                 this.inter = false;
+                                this.funeral_background.stop();
                                 this.scene.start('puzzle1Scene');
                             });
                         })
@@ -429,7 +437,7 @@ class Funeral extends Phaser.Scene{
 
         if(Phaser.Input.Keyboard.JustDown(keyF)) {
             this.isPass = true;
-            this.scene.start('creditScene');
+            this.scene.start('exitScene');
         }
 
         isJump = true;

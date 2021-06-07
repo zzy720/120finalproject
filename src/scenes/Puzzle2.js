@@ -96,9 +96,9 @@ class Puzzle2 extends Phaser.Scene {
         this.spike1.setScale(1.2);
         this.spike2 = this.spikegroup.create(300, 663, 'spikes');
         this.spike2.setScale(1.2);
-        this.spike3 = this.spikegroup.create(481, 520, 'spikes');
-        this.spike3.angle = 180;
-        this.spike3.setScale(1.1);
+        //this.spike3 = this.spikegroup.create(481, 520, 'spikes');
+        //this.spike3.angle = 180;
+        //this.spike3.setScale(1.1);
         this.spike4 = this.spikegroup.create(300, 985, 'spikes');
         this.spike5 = this.spikegroup.create(410, 472, 'spikes');
         this.spike5.setScale(1.2);

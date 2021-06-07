@@ -17,14 +17,52 @@ class Puzzle2 extends Phaser.Scene {
         this.load.image('yellow_floor-open', './assets/images/door4-0.png');
         this.load.image('yellow_door-close', './assets/images/door3.png');
         this.load.image('yellow_door-open', './assets/images/door3-0.png');
+        this.load.spritesheet('idleshadow', './assets/ghostright_idle.png', {
+            frameWidth: 64,
+            frameHeight: 105
+        });
+        this.load.spritesheet('mom', './assets/Mom.png', {
+            frameWidth: 32,
+            frameHeight: 73
+        });
+        this.load.spritesheet('shadowfly2', './assets/flypuzzle2.png', {
+            frameWidth: 640,
+            frameHeight: 480
+        });
+        this.load.spritesheet('transform', './assets/transform.png', {
+            frameWidth: 64,
+            frameHeight: 105
+        });
     }
 
     create() {
 
         isRight = true; //intially facing right
+        this.dialogorder = 0;
         
         //controller count initialize
         this.control_yellow = 1;
+
+        this.anims.create({
+            key: 'flyshadow2',
+            frames: this.anims.generateFrameNumbers('shadowfly2'),
+            frameRate: 8
+        })
+        this.anims.create({
+            key: 'trans',
+            frames: this.anims.generateFrameNumbers('transform'),
+            frameRate: 3
+        })
+        this.anims.create({
+            key: 'gidle',
+            frames: this.anims.generateFrameNumbers('idleshadow'),
+            frameRate: 3
+        })
+        this.anims.create({
+            key: 'momidle',
+            frames: this.anims.generateFrameNumbers('mom'),
+            frameRate: 2
+        })
 
         this.map = this.add.tilemap('map2'); 
         let tiles3 = this.map.addTilesetImage('tileset3new','tiles3');  // set tileset name
@@ -120,6 +158,7 @@ class Puzzle2 extends Phaser.Scene {
 
         //create main character
         this.main = new Tony(this, 60, 890, 'idle_right', 0, 125).setOrigin(0, 0);
+        //this.main = new Tony(this, 400, 10, 'idle_right', 0, 125).setOrigin(0, 0);
         this.physics.add.existing(this.main);
         this.main.setScale(0.7);
         this.main.body.setSize(43, 85); 
@@ -127,8 +166,49 @@ class Puzzle2 extends Phaser.Scene {
         this.main.body.onWorldBounds = true;
 
         //shadow
-        this.shadow = this.add.sprite(0, 0, 'shadowfly1').setOrigin(0, 0);
+        this.shadow = this.add.sprite(16, 545, 'shadowfly2').setOrigin(0, 0); //initial shadow
         this.isPlay = false;
+        this.isEnd = false; //does the player reach the end?
+
+        this.shadow_final = this.physics.add.sprite(20, 55, 'idleshadow').setOrigin(0, 1); //shadow at the final position
+        this.shadow_final.setScale(0.8);
+        this.physics.add.collider(this.shadow_final, layer);
+        this.shadow_final.body.setSize(180, 102);
+
+        //mom
+        this.mom = this.add.sprite(this.shadow_final.x + 13, this.shadow_final.y + 16, 'mom').setOrigin(0, 0);
+        this.mom.setScale(0.8);
+        this.mom.flipX = true;
+        this.mom.setVisible(false);
+        this.istalking = false; //is player talking to mom?
+        this.hastalkedmom = false;//has player finished talking with mom?
+
+        this.physics.add.overlap(this.shadow_final, this.main, () => {
+            this.isPlay = false;
+            this.isEnd = true;
+            this.cameras.main.zoomTo(2, 1000);
+            this.shadow_final.anims.play('trans', true);
+            this.shadow_final.on('animationcomplete', () => {
+                this.shadow_final.destroy();
+                this.isPlay = true;
+                this.mom.setVisible(true);
+                this.mom.anims.play('momidle', true);
+                this.time.delayedCall(1000, () => {
+                    this.istalking = true;
+                });
+            });
+        });
+
+        //dialogue box config
+        this.back = this.add.sprite(0, 160, 'dialog').setOrigin(0, 0);
+        this.back.setScale(0.5);
+        this.dialogue = this.add.text(this.back.x + 20, this.back.y + 15, 'null', finalConfig).setOrigin(0, 0);
+        this.space = this.add.text(this.dialogue.x, this.dialogue.y + 40, "Press S to continue", finalConfig);
+
+        //set to invisible when not activated
+        this.back.setActive(false).setVisible(false);
+        this.dialogue.setActive(false).setVisible(false);
+        this.space.setActive(false).setVisible(false);
 
         //jump mechanics 
         this.physics.world.on('worldbounds', () => {
@@ -179,17 +259,14 @@ class Puzzle2 extends Phaser.Scene {
         this.cameras.main.startFollow(this.main, false, 1, 1, 0, 155);
 
         //play initial animation
-        this.cameras.main.zoomTo(2, 1000);
         this.time.delayedCall(2000, () => {
             let question = this.add.sprite(this.main.x + 55, this.main.y, 'question'); //?
             question.anims.play('what');
             question.on('animationcomplete', () => {
                 question.destroy();
-                this.shadow.anims.play('flyshadow1',true);
+                this.shadow.anims.play('flyshadow2',true);
                 this.shadow.on('animationcomplete', () => {
                     this.time.delayedCall(2000, () => {
-                        this.cameras.main.zoomTo(1, 1000);
-                        this.cameras.main.centerOn(0, 0);
                         this.shadow.destroy();
                         this.isPlay = true;
                     });
@@ -209,6 +286,29 @@ class Puzzle2 extends Phaser.Scene {
 
         if(this.isPlay) {
             this.input.keyboard.enabled = true;
+        }
+
+        if(!this.isEnd) {
+            this.shadow_final.anims.play('gidle', true);
+        }
+
+        if(this.isEnd) {
+            this.main.body.setVelocity(0);
+        }
+
+        if(this.istalking) {
+            this.momtalk();
+            if(this.hastalkedmom){
+                this.time.delayedCall(1000, () => {
+                    let shine = this.add.sprite(0, 0, 'glow').setOrigin(0, 0);
+                    shine.flipX = true;
+                    shine.flipY = true;
+                    shine.anims.play('shine');
+                    shine.on('animationcomplete', () => {
+                        this.scene.start('funeralScene');
+                    });
+                });
+            }
         }
 
         if(this.main.x < 0){
@@ -269,5 +369,25 @@ class Puzzle2 extends Phaser.Scene {
         this.main.setPosition(60, 950);
         this.box1.setPosition(771, 870);
         this.box2.setPosition(820, 320);
+    }
+
+    momtalk() {
+        this.back.setActive(true).setVisible(true);
+        this.dialogue.setActive(true).setVisible(true);
+        this.space.setActive(true).setVisible(true);
+        this.dialogue.text = momdialogue[this.dialogorder];
+        if(Phaser.Input.Keyboard.JustDown(keyS)) {
+            this.sound.play('button');
+            this.dialogorder += 1;
+            this.dialogue.text = momdialogue[this.dialogorder];
+            if(this.dialogorder > momdialogue.length) {
+                this.back.setVisible(false);
+                this.dialogue.setVisible(false);
+                this.space.setVisible(false);
+                this.dialogorder = 0;
+                this.istalking = false;
+                this.hastalkedmom = true;
+            }
+        }
     }
 }

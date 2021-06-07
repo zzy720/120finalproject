@@ -190,6 +190,7 @@ class Funeral extends Phaser.Scene{
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
         //set world boundary
         this.physics.world.setBounds(0, 0, 1500, game.config.height - 30);
@@ -294,7 +295,7 @@ class Funeral extends Phaser.Scene{
         //dialogue box config
         this.back = this.add.sprite(0, 319, 'dialog');
         this.dialogue = this.add.text(40, 360, 'null', scoreConfig).setOrigin(0, 0);
-        this.space = this.add.text(40, 440, "Press S to continue", textConfig);
+        this.space = this.add.text(40, 440, "Press S to continue", scoreConfig);
 
         //set to invisible when not activated
         this.back.setActive(false).setVisible(false);
@@ -403,6 +404,11 @@ class Funeral extends Phaser.Scene{
     }
 
     update() {
+
+        if(Phaser.Input.Keyboard.JustDown(keyF)) {
+            this.isPass = true;
+            this.scene.start('creditScene');
+        }
 
         isJump = true;
         this.main.update();
@@ -567,29 +573,6 @@ class Funeral extends Phaser.Scene{
 
         } 
 
-    }
-
-    //typewriting texts
-    typewriteText(text) {
-        const length = text.length;
-        let i = 0;
-        this.typeFinish = false;
-        this.time.addEvent({
-            callback: () => {
-                this.typing.text += text[i];
-                ++i;
-            },
-            repeat: length - 1,
-            delay: 0
-        });
-        this.typeFinish = true;
-    }
-
-    typewriteTextWrapped(text) {
-	    const lines = this.typing.getWrappedText(text)
-	    const wrappedText = lines.join('\n')
-
-	    this.typewriteText(wrappedText)
     }
 
     //dialogue with cousin4

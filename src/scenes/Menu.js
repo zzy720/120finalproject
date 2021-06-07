@@ -44,7 +44,7 @@ class Menu extends Phaser.Scene{
         this.anims.create({
             key: 'titleanim',
             frames: this.anims.generateFrameNumbers('title'),
-            frameRate: 3
+            frameRate: 4
         })
 
         //this.background.play(); //play bgm
@@ -60,6 +60,10 @@ class Menu extends Phaser.Scene{
         //add texts
         this.titletest = this.add.sprite(360, 242, 'title');
         this.titletest.setScale(0.5);
+        this.title = this.add.text(320, 240, 'THE FUNERAL', scoreConfig).setOrigin(0.5, 0.5);
+        this.title.alpha = 0;
+        this.continue = this.add.text(320, 300, 'Press Space to start', scoreConfig).setOrigin(0.5, 0.5);
+        this.continue.alpha = 0;
 
         //camera follow
         this.holder = this.physics.add.sprite(0, 0, 'holder').setOrigin(0, 0);
@@ -93,7 +97,8 @@ class Menu extends Phaser.Scene{
         this.titletest.anims.play('titleanim', true);
 
         this.titletest.setPosition(this.holder.x + 328, this.holder.y + 245);
-        
+        //this.title.setPosition(this.holder.x + 320, this.holder.y + 240);
+        //this.continue.setPosition(this.title.x, this.title.y + 60);
         //go to game scene when press space
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.sound.play('button'); //play sfx

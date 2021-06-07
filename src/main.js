@@ -3,7 +3,7 @@ let config = {
     type: Phaser.WEBGL,
     width: 640,
     height: 480,
-    scene: [ Menu, Funeral, Puzzle1, Puzzle2 ],
+    scene: [ Menu, Funeral, Puzzle1, Puzzle2, Credit, End],
     physics: {
         default: 'arcade',
         arcade: {
@@ -20,17 +20,35 @@ let scoreConfig = {
     fontFamily: 'pixel',
     fontSize: '21px',
     //backgroundColor: '#2f4673',
-    color: '#6b97bb',
+    color: '#625B57',
     align: 'right',
     fixedWidth: 0
 };
 
-let textConfig = {
+let finalConfig = {
     fontFamily: 'pixel',
-    fontSize: '23px',
+    fontSize: '14px',
     //backgroundColor: '#2f4673',
-    color: '#000000',
+    color: '#625B57',
     align: 'right',
+    fixedWidth: 0
+};
+
+let creditConfig = {
+    fontFamily: 'pixel',
+    fontSize: '30px',
+    //backgroundColor: '#2f4673',
+    color: '#625B57',
+    align: 'left',
+    fixedWidth: 0
+};
+
+let endConfig = {
+    fontFamily: 'pixel',
+    fontSize: '72px',
+    //backgroundColor: '#2f4673',
+    color: '#625B57',
+    align: 'middle',
     fixedWidth: 0
 };
 
@@ -83,4 +101,18 @@ let fatherdialogueafter = ["Dad:  I loved her so much,",
                            "Dad:  It's time to go home,", 
                            "Dad:  but before that...",
                            "Dad:  would you want to say goodbye to your mom?"];
+
+let momdialogue = ["Mom:  Hey Tony,",
+                   "Mom:  How's everything going?",
+                   "Tony:  Mom! Are...",
+                   "Mom:  You've been doing great Tony,",
+                   "Mom:  don't worry.",
+                   "Tony: Mom, please stay with me forever!",
+                   "Mom:  ...",
+                   "Tony:  Mom!",
+                   "Mom:  Stay strong Tony, trust yourself.",
+                   "Tony:  Mom!",
+                   "Mom:  Remember, you are always the best,",
+                   "Mom:  and you are always my boy.",
+                   "Tony:  Mom!"];
 

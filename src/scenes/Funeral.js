@@ -88,9 +88,17 @@ class Funeral extends Phaser.Scene{
             frameHeight: 18
         });
 
+        //audio
+        this.load.audio('walk', './assets/walking.wav');
+
     }
 
     create() {
+
+        this.walking = this.sound.add('walk', {
+            volume: 0.4,
+            loop: true
+        });
 
         isRight = true; //initially facing right
         this.hastalked = false; //talked to dad or not
@@ -401,6 +409,20 @@ class Funeral extends Phaser.Scene{
         //camera setting
         this.cameras.main.setBounds(0, 0, 1500, game.config.height); //world bound
         this.cameras.main.startFollow(this.main, false, 1, 1, 0, 155); //follow the main character
+
+        //create footstep
+        this.input.keyboard.on('keydown-A', () => {
+            this.walking.play();
+        });
+        this.input.keyboard.on('keyup-A', () => {
+            this.walking.stop();
+        });
+        this.input.keyboard.on('keydown-D', () => {
+            this.walking.play();
+        });
+        this.input.keyboard.on('keyup-D', () => {
+            this.walking.stop();
+        });
     }
 
     update() {
@@ -442,7 +464,6 @@ class Funeral extends Phaser.Scene{
                 this.walkright.destroy();
                 this.rightarrow.destroy();
             });
-            
             if(isRight) {
                 this.main.anims.play('rightwalk', true);
             }
@@ -462,9 +483,10 @@ class Funeral extends Phaser.Scene{
 
         //if interact with tomb then player cannot move
         if(this.inter) {
+            this.isStop = true;
             this.input.keyboard.enabled = false;
             this.main.body.setVelocity(0);
-            this.isStop = true;
+            this.walking.stop();
         } else {
             this.input.keyboard.enabled = true;
         }

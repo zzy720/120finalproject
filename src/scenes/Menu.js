@@ -6,7 +6,6 @@ class Menu extends Phaser.Scene{
     preload() {
         //load sfx and bgm
         this.load.audio('button', './assets/button.wav');
-        this.load.audio('bgm', './assets/bgm.wav');
         this.load.image('FuneralBack', './assets/Funeral.png');
         this.load.image('holder', './assets/blank.png');
         this.load.image('rip', './assets/Grave.png');
@@ -25,12 +24,6 @@ class Menu extends Phaser.Scene{
     }
 
     create() {
-        //create bgm and play
-        this.background = this.sound.add('bgm', {
-            volume: 0.3,
-            loop: true,
-        });
-
         this.anims.create({
             key: 'groupidle',
             frames: this.anims.generateFrameNumbers('group'),
@@ -47,7 +40,6 @@ class Menu extends Phaser.Scene{
             frameRate: 4
         })
 
-        //this.background.play(); //play bgm
 
         //background layer
         this.background = this.add.sprite(0, 0, 'FuneralBack').setOrigin(0, 0);

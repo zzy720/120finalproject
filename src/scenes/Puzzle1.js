@@ -47,9 +47,25 @@ class Puzzle1 extends Phaser.Scene{
             frameWidth: 640,
             frameHeight: 480
         })
+
+        //load audio
+        this.load.audio('dooropen', './assets/door_open.wav');
+        this.load.audio('floordooropen', './assets/floor_door_open.wav');
+        this.load.audio('running1', './assets/running1.wav');
     }
 
     create() {
+
+        this.stepbutton = this.sound.add('floordooropen', { //sound played when stepon button and open trapdoor
+            volume: 0.6
+        });
+        this.opendoor = this.sound.add('dooropen', { //sound played when turn lever and open door
+            volume: 0.3
+        })
+        this.running = this.sound.add('running1', { //running sound
+            volume: 0.4,
+            loop: true
+        })
 
         isRight = true; //intially facing right
         
@@ -228,8 +244,13 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.add.collider(this.button1, this.main, () => {
             isJump = false;
         });
+        let played1 = false;
         this.physics.add.overlap(this.button1_sub, this.main, () => {
             isJump = false;
+            if(!played1) {
+                this.stepbutton.play();
+                played1 = true;
+            }
             this.button1.setTexture('button-down');
             this.floordoor1.setTexture('floor_door_open');
             this.floordoor1.setActive(false);
@@ -246,8 +267,13 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.add.collider(this.button2, this.main, () => {
             isJump = false;
         });
+        let played2 = false;
         this.physics.add.overlap(this.button2_sub, this.main, () => {
             isJump = false;
+            if(!played2) {
+                this.stepbutton.play();
+                played2 = true;
+            }
             this.button2.setTexture('button-down');
             this.floordoor2.setTexture('floor_door_open');
             this.floordoor2.setActive(false);
@@ -263,8 +289,13 @@ class Puzzle1 extends Phaser.Scene{
         this.physics.add.collider(this.button3, this.main, () => {
             isJump = false;
         });
+        let played3 = false;
         this.physics.add.overlap(this.button3_sub, this.main, () => {
             isJump = false;
+            if(!played3) {
+                this.stepbutton.play();
+                played3 = true;
+            }
             this.button3.setTexture('button-down');
             this.floordoor3.setTexture('floor_door_open');
             this.floordoor3.setActive(false);
@@ -306,6 +337,7 @@ class Puzzle1 extends Phaser.Scene{
         this.controller1_sub.alpha = 0;
         this.physics.add.overlap(this.controller1_sub, this.main, () => {
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
+                this.opendoor.play();
                 if(this.control_red % 2 == 0){
                     this.controller1.setTexture('controller1-left');
                     this.red_door_1.setTexture('red_door-close');
@@ -329,6 +361,7 @@ class Puzzle1 extends Phaser.Scene{
         this.controller2_sub.alpha = 0;
         this.physics.add.overlap(this.controller2_sub, this.main, () => {
             if(Phaser.Input.Keyboard.JustDown(keyE)) {
+                this.opendoor.play();
                 if(this.control_purple % 2 == 0){
                     this.controller2.setTexture('controller2-left');
                     this.purple_door_1.setTexture('purple_door-close');
@@ -391,6 +424,22 @@ class Puzzle1 extends Phaser.Scene{
                     });
                 });
             });
+        });
+
+        //create footstep
+
+
+        this.input.keyboard.on('keydown-A', () => {
+            this.running.play();
+        });
+        this.input.keyboard.on('keyup-A', () => {
+            this.running.stop();
+        });
+        this.input.keyboard.on('keydown-D', () => {
+            this.running.play();
+        });
+        this.input.keyboard.on('keyup-D', () => {
+            this.running.stop();
         });
     }
 

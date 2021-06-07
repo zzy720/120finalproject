@@ -156,7 +156,7 @@ class Puzzle1 extends Phaser.Scene{
         this.spike1 = this.spikegroup.create(42, 408, 'spikes');
         this.spike2 = this.spikegroup.create(420, 665, 'spikes');
         this.spike3 = this.spikegroup.create(540, 568, 'spikes');
-        this.spike4 = this.spikegroup.create(700, 37, 'spikes');
+        this.spike4 = this.spikegroup.create(660, 37, 'spikes');
         this.spike4.angle = 180;
         this.spike5 = this.spikegroup.create(700, 280, 'spikes');
         this.spike6 = this.spikegroup.create(540, 923, 'spikes');
@@ -280,9 +280,9 @@ class Puzzle1 extends Phaser.Scene{
             this.floordoor2.body.enable = false;
         });
 
-        this.button3 = this.buttongroup.create(85, 795, 'button-up');
+        this.button3 = this.buttongroup.create(70, 795, 'button-up');
         this.button3.setSize(32, 7);
-        this.button3_sub = this.buttongroup.create(85, 790, 'button-up');
+        this.button3_sub = this.buttongroup.create(70, 790, 'button-up');
         this.button3_sub.alpha = 0;
         this.button3_sub.body.setSize(15, 3);
         this.physics.add.collider(this.button3, this.button3_sub);

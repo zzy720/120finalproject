@@ -348,6 +348,7 @@ class Puzzle2 extends Phaser.Scene {
         }
         
         if(!this.isPlay) {
+            this.main.body.setVelocityX(0);
             this.input.keyboard.enabled = false;
         }
 

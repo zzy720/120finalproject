@@ -232,6 +232,8 @@ class Puzzle1 extends Phaser.Scene{
                     }, null, this);
                     this.clock = this.time.delayedCall(5000, () => {
                         this.input.keyboard.enabled = true;
+                        this.main.body.setVelocity(0);
+                        this.running.stop();
                         this.scene.start('puzzle2Scene');
                     }, null, this);
                 }
@@ -486,6 +488,7 @@ class Puzzle1 extends Phaser.Scene{
         this.pressspace.anims.play('pressspace', true);
 
         if(!this.isPlay) {
+            this.main.body.setVelocityX(0);
             this.input.keyboard.enabled = false;
         }
 
